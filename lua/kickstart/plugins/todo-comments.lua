@@ -5,7 +5,11 @@ return {
     event = { 'BufReadPost', 'BufNewFile' },
     dependencies = 'nvim-lua/plenary.nvim',
     cmd = { 'TodoTrouble', 'TodoTelescope' },
-    opts = { signs = false },
+    opts = {
+      signs = false,
+      search = { pattern = [[\b(KEYWORDS)(\([^\)]*\))?:]] },
+      highlight = { pattern = [[.*<((KEYWORDS)%(\(.{-1,}\))?):]] },
+    },
     config = true,
     keys = {
       -- stylua: ignore start
