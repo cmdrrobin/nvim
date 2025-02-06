@@ -12,7 +12,7 @@ return {
     lint.linters_by_ft = opts.linters_by_ft
 
     -- create autocmd on events for firing nvim-lint
-    vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
+    vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost' }, {
       group = vim.api.nvim_create_augroup('nvim-lint', { clear = true }),
       callback = function()
         -- Do not execute linting on read-only buffers. This can get quite
