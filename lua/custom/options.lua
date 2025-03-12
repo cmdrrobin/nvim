@@ -20,6 +20,7 @@ vim.opt.formatoptions:remove('o')
 vim.g.netrw_browse_split = 0
 vim.g.netrw_banner = 0
 vim.g.netrw_winsize = 25
+vim.g.netrw_bufsettings = 'nu'
 
 -- always write files as utf-8
 vim.g.fileencoding = 'utf-8'
