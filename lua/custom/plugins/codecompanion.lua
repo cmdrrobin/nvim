@@ -6,7 +6,6 @@ return {
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
-      'hrsh7th/nvim-cmp', -- Optional: For using slash commands and variables in the chat buffer
       'nvim-telescope/telescope.nvim', -- Optional: For using slash commands
     },
     keys = {
@@ -26,6 +25,23 @@ return {
     config = function(_, opts)
       require('codecompanion').setup(opts)
     end,
+  },
+  -- blink.cmp integration
+  {
+    'saghen/blink.cmp',
+    optional = true,
+    opts = {
+      sources = {
+        per_filetype = {
+          codecompanion = {
+            'codecompanion',
+            'lsp',
+            'path',
+            'buffer',
+          },
+        },
+      },
+    },
   },
 }
 
