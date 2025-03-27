@@ -27,3 +27,5 @@ vim.g.fileencoding = 'utf-8'
 
 -- only the last window will always have a status line
 vim.opt.laststatus = 3
+
+vim.g.copilot_enabled = false
