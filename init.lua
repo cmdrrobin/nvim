@@ -48,7 +48,7 @@ require('lazy').setup({
   require('kickstart.plugins.telescope'), -- Fuzzy find / file explorer
   require('kickstart.plugins.lsp'), -- Language Server Protocol Plugins
   require('kickstart.plugins.conform'), -- Formatting
-  require('kickstart.plugins.nvim-cmp'), -- Completion
+  require('kickstart.plugins.blink'), -- Completion
   require('kickstart.plugins.todo-comments'), -- Highlight todo, notes, etc in comments
   require('kickstart.plugins.treesitter'), -- Highlight, edit, and navigate code
 
