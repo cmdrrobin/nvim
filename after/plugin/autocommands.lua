@@ -31,6 +31,7 @@ vim.api.nvim_create_autocmd({ 'BufEnter' }, {
   end,
 })
 
+-- Make it possible to format manually
 vim.api.nvim_create_user_command('Format', function()
   local conform_ok, conform = pcall(require, 'conform')
   if conform_ok then
@@ -40,6 +41,16 @@ vim.api.nvim_create_user_command('Format', function()
   end
 end, { desc = 'Format current buffer' })
 
+-- Make it possible to toggle auto formatting
 vim.api.nvim_create_user_command('FormatToggle', function()
   vim.g.format_on_save = not vim.g.format_on_save
 end, { desc = 'Toggle format on save' })
+
+-- When using terminal, remove (relative) numbers
+vim.api.nvim_create_autocmd('TermOpen', {
+  group = vim.api.nvim_create_augroup('cust-term-open', { clear = true }),
+  callback = function()
+    vim.o.number = false
+    vim.o.relativenumber = false
+  end,
+})
