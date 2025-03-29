@@ -28,13 +28,17 @@ return {
       -- show number of spaces that is used for current buffer with additional icon
       local spaces = {
         function()
-          return icons.misc.Spaces .. ' ' .. vim.api.nvim_get_option_value('shiftwidth', { buf = 0 })
+          if not vim.g.have_icons then
+            return vim.api.nvim_get_option_value('shiftwidth', { buf = 0 })
+          else
+            return icons.misc.Spaces .. ' ' .. vim.api.nvim_get_option_value('shiftwidth', { buf = 0 })
+          end
         end,
       }
 
       return {
         options = {
-          icons_enabled = true,
+          icons_enabled = vim.g.have_icons,
           theme = 'auto',
           globalstatus = vim.o.laststatus == 3,
           component_separators = { left = '|', right = '' },

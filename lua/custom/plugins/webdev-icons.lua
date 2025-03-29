@@ -2,6 +2,7 @@
 return {
   'nvim-tree/nvim-web-devicons',
   event = { 'BufReadPost', 'BufNewFile' },
+  enabled = vim.g.have_icons,
   opts = {
     override_by_filename = {
       ['.gitattributes'] = {

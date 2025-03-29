@@ -65,6 +65,9 @@ vim.opt.scrolloff = 10
 -- Enable format on save
 vim.g.format_on_save = true
 
+-- Set to true if you want to show icons
+vim.g.have_icons = true
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 

@@ -207,7 +207,7 @@ return {
         severity_sort = true,
         float = { border = 'rounded', source = 'if_many' },
         underline = { severity = vim.diagnostic.severity.ERROR },
-        signs = {
+        signs = vim.g.have_icons and {
           text = {
             [vim.diagnostic.severity.ERROR] = diagnostic_icons.Error,
             [vim.diagnostic.severity.WARN] = diagnostic_icons.Warning,
