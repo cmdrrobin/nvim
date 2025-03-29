@@ -55,6 +55,38 @@ return {
         default = { 'lsp', 'path', 'snippets', 'buffer', 'lazydev' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+          lsp = {
+            name = 'lsp',
+            enabled = true,
+            module = 'blink.cmp.sources.lsp',
+            score_offset = 90, -- the higher the number, the higher the priority
+          },
+          path = {
+            name = 'Path',
+            enabled = true,
+            module = 'blink.cmp.sources.path',
+            score_offset = 25,
+            -- When typing a path, I would get snippets and text in the
+            -- suggestions, I want those to show only if there are no path
+            -- suggestions
+            fallbacks = { 'snippets', 'buffer' },
+            opts = {
+              trailing_slash = false,
+              label_trailing_slash = true,
+              get_cwd = function(context)
+                return vim.fn.expand(('#%d:p:h'):format(context.bufnr))
+              end,
+              show_hidden_files_by_default = true,
+            },
+          },
+          buffer = {
+            name = 'Buffer',
+            enabled = true,
+            max_items = 3,
+            module = 'blink.cmp.sources.buffer',
+            min_keyword_length = 2,
+            score_offset = 15, -- the higher the number, the higher the priority
+          },
         },
       },
 
@@ -76,7 +108,9 @@ return {
       fuzzy = { implementation = 'prefer_rust_with_warning' },
     },
     opts_extend = {
+      'completion',
       'sources.default',
+      'sources.providers',
       'sources.per_filetype',
     },
   },
