@@ -1,9 +1,20 @@
 return {
   {
     'saghen/blink.cmp',
-    -- optional: provides snippets for the snippet source
-    dependencies = { 'rafamadriz/friendly-snippets' },
-
+    dependencies = {
+      'rafamadriz/friendly-snippets',
+      {
+        'folke/lazydev.nvim',
+        ft = 'lua',
+        opts = {
+          library = {
+            -- Load luvit types when the `vim.uv` word is found
+            { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+          },
+        },
+      },
+    },
+    event = 'InsertEnter',
     -- use a release tag to download pre-built binaries
     version = '1.*',
 
@@ -27,22 +38,10 @@ return {
       appearance = {
         -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
         -- Adjusts spacing to ensure icons are aligned
-        use_nvim_cmp_as_default = true,
         nerd_font_variant = 'mono',
       },
 
       completion = {
-        accept = {
-          -- experimental auto-brackets support
-          auto_brackets = {
-            enabled = true,
-          },
-        },
-        menu = {
-          draw = {
-            treesitter = { 'lsp' },
-          },
-        },
         -- prefer always to view documentation
         documentation = {
           auto_show = true,
@@ -53,7 +52,10 @@ return {
       -- Default list of enabled providers defined so that you can extend it
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'buffer' },
+        default = { 'lsp', 'path', 'snippets', 'buffer', 'lazydev' },
+        providers = {
+          lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+        },
       },
 
       signature = {
