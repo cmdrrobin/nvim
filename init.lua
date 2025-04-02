@@ -68,6 +68,9 @@ require('lazy').setup({
   { import = 'custom.extras' },
 }, {
   change_detection = { notify = false }, -- disable changes notifications
+  install = {
+    colorscheme = { 'rose-pine' },
+  },
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
