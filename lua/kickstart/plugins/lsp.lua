@@ -262,17 +262,15 @@ return {
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
 
+      vim.lsp.config('*', {
+        capabilities = capabilities,
+      })
+
+      vim.lsp.enable({ 'lua_ls' })
+
       require('mason-lspconfig').setup({
         ensure_installed = ensure_installed,
         automatic_installation = true,
-        handlers = {
-          function(server_name)
-            local server_opts = vim.tbl_deep_extend('force', {
-              capabilities = vim.deepcopy(capabilities),
-            }, servers[server_name] or {})
-            require('lspconfig')[server_name].setup(server_opts)
-          end,
-        },
       })
     end,
   },
