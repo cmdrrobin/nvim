@@ -46,6 +46,12 @@ return {
         documentation = {
           auto_show = true,
           auto_show_delay_ms = 200,
+          window = {
+            border = 'padded',
+          },
+        },
+        menu = {
+          border = 'padded',
         },
       },
 
@@ -94,6 +100,7 @@ return {
         enabled = true,
         -- do not show documentation when viewing signatures
         window = {
+          border = 'padded',
           show_documentation = false,
         },
       },
