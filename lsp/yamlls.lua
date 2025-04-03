@@ -65,6 +65,28 @@ return {
   settings = {
     -- https://github.com/redhat-developer/vscode-redhat-telemetry#how-to-disable-telemetry-reporting
     redhat = { telemetry = { enabled = false } },
+    yaml = {
+      keyOrdering = false,
+      format = {
+        enable = true,
+      },
+      validate = true,
+      schemaStore = {
+        -- Must disable built-in schemaStore support to use
+        -- schemas from SchemaStore.nvim plugin
+        enable = false,
+        -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+        url = '',
+      },
+    },
+  },
+  capabilities = {
+    textDocument = {
+      foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+      },
+    },
   },
 }
 

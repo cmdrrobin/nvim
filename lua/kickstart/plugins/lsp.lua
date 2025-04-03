@@ -17,49 +17,6 @@ return {
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
     },
-    opts = {
-      -- Enable the following language servers
-      --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-      --
-      --  Add any additional override configuration in the following tables. Available keys are:
-      --  - cmd (table): Override the default command used to start the server
-      --  - filetypes (table): Override the default list of associated filetypes for the server
-      --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
-      --  - settings (table): Override the default settings passed when initializing the server.
-      --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-      servers = {
-        -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
-        -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`tsserver`) will work just fine
-        -- tsserver = {},
-        --
-
-        lua_ls = {
-          -- cmd = {...},
-          -- filetypes = { ...},
-          -- capabilities = {},
-          settings = {
-            Lua = {
-              diagnostics = {
-                globals = { 'vim' },
-              },
-              completion = {
-                callSnippet = 'Replace',
-              },
-              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
-            },
-          },
-        },
-      },
-    },
     config = function(_, opts)
       -- Brief Aside: **What is LSP?**
       --
@@ -248,7 +205,7 @@ return {
       })
 
       -- define servers based on options servers table
-      local servers = opts.servers
+      local ensure_installed = { 'lua_ls', 'basedpyright', 'gopls' }
 
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
@@ -260,13 +217,27 @@ return {
 
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
-      local ensure_installed = vim.tbl_keys(servers or {})
+      -- local ensure_installed = vim.tbl_keys(servers or {})
 
       vim.lsp.config('*', {
         capabilities = capabilities,
       })
 
-      vim.lsp.enable({ 'lua_ls', 'basedpyright' })
+      vim.lsp.enable({
+        'basedpyright',
+        'bash_ls',
+        'docker_compose_language_service',
+        'dockerls',
+        'gopls',
+        'helm_ls',
+        'lua_ls',
+        'ruff',
+        'ruff_lsp',
+        'taplo',
+        'terraformls',
+        'ts_ls',
+        'yamlls',
+      })
 
       require('mason-lspconfig').setup({
         ensure_installed = ensure_installed,

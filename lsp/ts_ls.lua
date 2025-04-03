@@ -78,6 +78,25 @@ return {
     'typescript.tsx',
   },
   root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
+  settings = {
+    typescript = {
+      format = {
+        indentSize = vim.o.shiftwidth,
+        convertTabsToSpaces = vim.o.expandtab,
+        tabSize = vim.o.tabstop,
+      },
+    },
+    javascript = {
+      format = {
+        indentSize = vim.o.shiftwidth,
+        convertTabsToSpaces = vim.o.expandtab,
+        tabSize = vim.o.tabstop,
+      },
+    },
+    completions = {
+      completeFunctionCalls = true,
+    },
+  },
 }
 
 -- The line beneath this is called `modeline`. See `:help modeline`

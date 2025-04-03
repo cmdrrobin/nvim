@@ -49,10 +49,25 @@ return {
   root_markers = root_files,
   settings = {
     basedpyright = {
+      disableOrganizeImports = false,
+      typeCheckingMode = 'standard',
       analysis = {
         autoSearchPaths = true,
         useLibraryCodeForTypes = true,
         diagnosticMode = 'openFilesOnly',
+      },
+    },
+    python = {
+      analysis = {
+        autoImportCompletions = true,
+        autoSearchPaths = true,
+        typeCheckingMode = 'basic',
+        diagnosticMode = 'workspace',
+        useLibraryCodeForTypes = true,
+        inlayHints = {
+          variableTypes = true,
+          functionReturnTypes = true,
+        },
       },
     },
   },
