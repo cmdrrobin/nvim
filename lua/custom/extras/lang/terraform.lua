@@ -16,15 +16,6 @@ return {
     end,
   },
   {
-    'neovim/nvim-lspconfig',
-    opts = {
-      servers = {
-        terraformls = {
-        },
-      },
-    },
-  },
-  {
     'mfussenegger/nvim-lint',
     optional = true,
     opts = {

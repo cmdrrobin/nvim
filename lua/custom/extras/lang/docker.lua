@@ -7,15 +7,6 @@ return {
       end
     end,
   },
-  {
-    'neovim/nvim-lspconfig',
-    opts = {
-      servers = {
-        dockerls = {},
-        docker_compose_language_service = {},
-      },
-    },
-  },
 }
 
 -- The line beneath this is called `modeline`. See `:help modeline`
