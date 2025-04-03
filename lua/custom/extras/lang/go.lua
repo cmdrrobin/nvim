@@ -16,23 +16,6 @@ return {
     end,
   },
   {
-    'neovim/nvim-lspconfig',
-    opts = {
-      servers = {
-        gopls = {
-          settings = {
-            gopls = {
-              gofumpt = true,
-            },
-          },
-          flags = {
-            debounce_text_changes = 150,
-          },
-        },
-      },
-    },
-  },
-  {
     'stevearc/conform.nvim',
     optional = true,
     opts = {

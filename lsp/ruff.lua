@@ -30,6 +30,26 @@ return {
   filetypes = { 'python' },
   root_markers = { 'pyproject.toml', 'ruff.toml', '.ruff.toml', '.git' },
   settings = {},
+  cmd_env = { RUFF_TRACE = 'messages' },
+  init_options = {
+    settings = {
+      logLevel = 'error',
+    },
+  },
+  keys = {
+    {
+      '<leader>co',
+      function()
+        vim.lsp.buf.code_action({
+          apply = true,
+          context = {
+            only = { 'source.organizeImports' },
+            diagnostics = {},
+          },
+        })
+      end,
+    },
+  },
 }
 
 -- The line beneath this is called `modeline`. See `:help modeline`

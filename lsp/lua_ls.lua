@@ -7,6 +7,9 @@ return {
       diagnostics = {
         globals = { 'vim', 'opt', 'cmd' },
       },
+      completion = {
+        callSnippet = 'Replace',
+      },
     },
     runtime = {
       version = 'LuaJIT',

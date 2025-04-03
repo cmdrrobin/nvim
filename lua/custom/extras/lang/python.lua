@@ -15,64 +15,6 @@ return {
     end,
   },
   {
-    'neovim/nvim-lspconfig',
-    opts = {
-      servers = {
-        basedpyright = {
-          settings = {
-            basedpyright = {
-              disableOrganizeImports = false,
-              typeCheckingMode = 'standard',
-            },
-            python = {
-              analysis = {
-                autoImportCompletions = true,
-                autoSearchPaths = true,
-                typeCheckingMode = 'basic',
-                diagnosticMode = 'workspace',
-                useLibraryCodeForTypes = true,
-                inlayHints = {
-                  variableTypes = true,
-                  functionReturnTypes = true,
-                },
-              },
-            },
-          },
-        },
-        ruff = {
-          cmd_env = { RUFF_TRACE = 'messages' },
-          init_options = {
-            settings = {
-              logLevel = 'error',
-            },
-          },
-          keys = {
-            {
-              '<leader>co',
-              function()
-                vim.lsp.buf.code_action({
-                  apply = true,
-                  context = {
-                    only = { 'source.organizeImports' },
-                    diagnostics = {},
-                  },
-                })
-              end,
-            },
-          },
-        },
-      },
-    },
-    setup = {
-      ruff = function()
-        require('custom.functions').on_attach(function(client, _)
-          -- Disable hover in favor of Pyright
-          client.server_capabilities.hoverProvider = false
-        end, 'ruff')
-      end,
-    },
-  },
-  {
     'mfussenegger/nvim-lint',
     optional = true,
     opts = {

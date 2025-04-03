@@ -16,36 +16,6 @@ return {
       vim.list_extend(opts.ensure_installed, { 'typescript-language-server' })
     end,
   },
-  -- correctly setup lspconfig
-  {
-    'neovim/nvim-lspconfig',
-    opts = {
-      -- make sure mason installs the server
-      servers = {
-        ts_ls = {
-          settings = {
-            typescript = {
-              format = {
-                indentSize = vim.o.shiftwidth,
-                convertTabsToSpaces = vim.o.expandtab,
-                tabSize = vim.o.tabstop,
-              },
-            },
-            javascript = {
-              format = {
-                indentSize = vim.o.shiftwidth,
-                convertTabsToSpaces = vim.o.expandtab,
-                tabSize = vim.o.tabstop,
-              },
-            },
-            completions = {
-              completeFunctionCalls = true,
-            },
-          },
-        },
-      },
-    },
-  },
 }
 
 -- The line beneath this is called `modeline`. See `:help modeline`
