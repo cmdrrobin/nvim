@@ -266,7 +266,7 @@ return {
         capabilities = capabilities,
       })
 
-      vim.lsp.enable({ 'lua_ls' })
+      vim.lsp.enable({ 'lua_ls', 'basedpyright' })
 
       require('mason-lspconfig').setup({
         ensure_installed = ensure_installed,
