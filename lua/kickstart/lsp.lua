@@ -148,7 +148,8 @@ vim.diagnostic.config({
 --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
 --  So, we create new capabilities with blink cmp, and then broadcast that to the servers.
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities({}, false))
+local has_blink, blink = pcall(require, 'blink.cmp')
+capabilities = vim.tbl_deep_extend('force', capabilities, has_blink and blink.get_lsp_capabilities() or {})
 
 capabilities = vim.tbl_deep_extend('force', capabilities, {
   textDocument = {
