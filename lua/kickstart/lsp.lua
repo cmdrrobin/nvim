@@ -179,7 +179,6 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
       'helm_ls',
       'lua_ls',
       'ruff',
-      'ruff_lsp',
       'taplo',
       'terraformls',
       'ts_ls',
