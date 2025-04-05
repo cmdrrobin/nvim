@@ -12,14 +12,7 @@ return {
     'williamboman/mason.nvim',
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
-      vim.list_extend(opts.ensure_installed, { 'goimports', 'gofumpt' })
-    end,
-  },
-  {
-    'williamboman/mason-lspconfig.nvim',
-    opts = function(_, opts)
-      opts.ensure_installed = opts.ensure_installed or {}
-      vim.list_extend(opts.ensure_installed, { 'gopls' })
+      vim.list_extend(opts.ensure_installed, { 'gopls', 'goimports', 'gofumpt' })
     end,
   },
   {
