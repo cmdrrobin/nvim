@@ -7,7 +7,6 @@ return {
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for neovim
       { 'williamboman/mason.nvim', config = true },
-      'williamboman/mason-lspconfig.nvim',
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -16,6 +15,7 @@ return {
     opts = {
       -- TODO: comments for installing LSP
       ensure_installed = { 'lua_ls' },
+      automatic_installation = true,
     },
     config = function(_, opts)
       -- Brief Aside: **What is LSP?**
@@ -43,9 +43,6 @@ return {
       -- If you're wondering about lsp vs treesitter, you can check out the wonderfully
       -- and elegantly composed help section, `:help lsp-vs-treesitter`
 
-      -- define servers based on options servers table
-      local ensure_installed = opts.ensure_installed
-
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
       --  other tools, you can run
@@ -54,16 +51,9 @@ return {
       --  You can press `g?` for help in this menu
       require('mason').setup()
 
-      -- You can add other tools here that you want Mason to install
-      -- for you, so that they are available from within Neovim.
-      -- local ensure_installed = vim.tbl_keys(servers or {})
-
       ---@module 'mason-lspconfig'
       ---@type MasonLspconfigSettings
-      require('mason-lspconfig').setup({
-        ensure_installed = ensure_installed,
-        automatic_installation = true,
-      })
+      require('mason-lspconfig').setup(opts)
     end,
   },
 }
