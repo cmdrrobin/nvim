@@ -143,39 +143,49 @@ vim.diagnostic.config({
   },
 })
 
--- LSP servers and clients are able to communicate to each other what features they support.
---  By default, Neovim doesn't support everything that is in the LSP Specification.
---  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
---  So, we create new capabilities with blink cmp, and then broadcast that to the servers.
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-local has_blink, blink = pcall(require, 'blink.cmp')
-capabilities = vim.tbl_deep_extend('force', capabilities, has_blink and blink.get_lsp_capabilities() or {})
+-- Load LSP configs and capabilities when opening or creating a new file.
+-- This speeds up the initial loading of Neovim. Altough not required to do this.
+vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
+  group = vim.api.nvim_create_augroup('kickstart-lsp-config', { clear = true }),
+  callback = function()
+    -- LSP servers and clients are able to communicate to each other what features they support.
+    --  By default, Neovim doesn't support everything that is in the LSP Specification.
+    --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
+    --  So, we create new capabilities with blink cmp, and then broadcast that to the servers.
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    local has_blink, blink = pcall(require, 'blink.cmp')
+    capabilities = vim.tbl_deep_extend('force', capabilities, has_blink and blink.get_lsp_capabilities() or {})
 
-capabilities = vim.tbl_deep_extend('force', capabilities, {
-  textDocument = {
-    foldingRange = {
-      dynamicRegistration = false,
-      lineFoldingOnly = true,
-    },
-  },
-})
+    -- When required, add some custom capabilities settings
+    capabilities = vim.tbl_deep_extend('force', capabilities, {
+      textDocument = {
+        foldingRange = {
+          dynamicRegistration = false,
+          lineFoldingOnly = true,
+        },
+      },
+    })
 
-vim.lsp.config('*', { capabilities = capabilities })
+    -- Load all LSP configurations that are defined in $RUN_DIR/lsp/*.lua
+    vim.lsp.config('*', { capabilities = capabilities })
 
-vim.lsp.enable({
-  'basedpyright',
-  'bash_ls',
-  'docker_compose_language_service',
-  'dockerls',
-  'gopls',
-  'helm_ls',
-  'lua_ls',
-  'ruff',
-  'ruff_lsp',
-  'taplo',
-  'terraformls',
-  'ts_ls',
-  'yamlls',
+    -- Enable LSP for defined filetypes
+    vim.lsp.enable({
+      'basedpyright',
+      'bash_ls',
+      'docker_compose_language_service',
+      'dockerls',
+      'gopls',
+      'helm_ls',
+      'lua_ls',
+      'ruff',
+      'ruff_lsp',
+      'taplo',
+      'terraformls',
+      'ts_ls',
+      'yamlls',
+    })
+  end,
 })
 
 -- LspLog window in new tab
