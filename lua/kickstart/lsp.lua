@@ -177,6 +177,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
       'dockerls',
       'gopls',
       'helm_ls',
+      'jsonls',
       'lua_ls',
       'ruff',
       'taplo',
