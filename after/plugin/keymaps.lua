@@ -16,10 +16,6 @@ vim.keymap.set('n', '<S-l>', ':bnext<CR>', { desc = 'Next Buffer' }) -- move to 
 vim.keymap.set('n', '<S-h>', ':bprevious<CR>', { desc = 'Previous Buffer' }) -- move to previous buffer
 vim.keymap.set('n', '<S-q>', ':bd!<CR>') -- delete current buffer
 
--- buffer bracket motion
-vim.keymap.set('n', ']b', ':bnext<CR>', { desc = 'Next Buffer' }) -- move to next buffer
-vim.keymap.set('n', '[b', ':bprevious<CR>', { desc = 'Previous Buffer' }) -- move to previous buffer
-
 -- File Explorer
 vim.keymap.set('n', '<leader>pv', '<cmd>Ex<CR>', { desc = 'Open Netrw' })
 
