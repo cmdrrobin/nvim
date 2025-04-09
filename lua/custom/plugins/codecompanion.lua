@@ -13,11 +13,19 @@ return {
       { '<leader>a', '<cmd>CodeCompanionChat Toggle<cr>' },
     },
     opts = {
+      adapters = {
+        opts = {
+          show_defaults = false,
+        },
+      },
       strategies = {
         chat = {
           adapter = 'anthropic',
         },
         inline = {
+          adapter = 'anthropic',
+        },
+        cmd = {
           adapter = 'anthropic',
         },
       },
