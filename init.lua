@@ -45,7 +45,7 @@ require('lazy').setup({
   require('kickstart.plugins.gitsigns'), -- Adds git related signs to the gutter, as well as utilities for managing changes
   require('kickstart.plugins.whichkey'), -- Keys overlay
   require('kickstart.plugins.telescope'), -- Fuzzy find / file explorer
-  require('kickstart.plugins.lsp'), -- Language Server Protocol Plugins
+  require('kickstart.plugins.mason-lspconfig'), -- Language Server Protocol Plugins
   require('kickstart.plugins.conform'), -- Formatting
   require('kickstart.plugins.blink'), -- Completion
   require('kickstart.plugins.todo-comments'), -- Highlight todo, notes, etc in comments

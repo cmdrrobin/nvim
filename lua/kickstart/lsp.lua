@@ -149,7 +149,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
   group = vim.api.nvim_create_augroup('kickstart-lsp-config', { clear = true }),
   callback = function()
     -- LSP servers and clients are able to communicate to each other what features they support.
-    --  By default, Neovim doesn't support everything that is in the LSP Specification.
+    --  By default, Neovim supports native capabilities, but still limited. More info see `:h lsp-completion`.
     --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
     --  So, we create new capabilities with blink cmp, and then broadcast that to the servers.
     local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -166,10 +166,11 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
       },
     })
 
-    -- Load all LSP configurations that are defined in $RUN_DIR/lsp/*.lua
+    -- Load all LSP configurations that are under Neovim RTP, lsp/ folder.
     vim.lsp.config('*', { capabilities = capabilities })
 
     -- Enable LSP for defined filetypes
+    -- NOTE: should we enable this when mason-lspconfig is loaded?
     vim.lsp.enable({
       'basedpyright',
       'bash_ls',
