@@ -20,6 +20,9 @@ return {
         inline = {
           adapter = 'anthropic',
         },
+        cmd = {
+          adapter = 'anthropic',
+        },
       },
     },
     config = function(_, opts)
