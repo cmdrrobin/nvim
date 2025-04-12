@@ -42,7 +42,6 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   require('kickstart.plugins.colorscheme'), -- add some extra color to my PDE
-  require('kickstart.plugins.vim-sleuth'), -- Detect tabstop and shiftwidth automatically
   require('kickstart.plugins.gitsigns'), -- Adds git related signs to the gutter, as well as utilities for managing changes
   require('kickstart.plugins.whichkey'), -- Keys overlay
   require('kickstart.plugins.telescope'), -- Fuzzy find / file explorer
