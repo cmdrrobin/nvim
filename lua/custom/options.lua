@@ -28,4 +28,7 @@ vim.g.fileencoding = 'utf-8'
 -- only the last window will always have a status line
 vim.opt.laststatus = 3
 
+-- set default border style for floating windows
+vim.o.winborder = 'solid'
+
 vim.g.copilot_enabled = false
