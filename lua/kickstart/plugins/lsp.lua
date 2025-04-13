@@ -3,7 +3,6 @@ return {
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
-    version = '1.x.x',
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for neovim
@@ -248,7 +247,7 @@ return {
       })
 
       -- define servers based on options servers table
-      local servers = opts.servers
+      local servers = opts.servers or {}
 
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
@@ -265,15 +264,15 @@ return {
       require('mason-lspconfig').setup({
         ensure_installed = ensure_installed,
         automatic_installation = true,
-        handlers = {
-          function(server_name)
-            local server_opts = vim.tbl_deep_extend('force', {
-              capabilities = vim.deepcopy(capabilities),
-            }, servers[server_name] or {})
-            require('lspconfig')[server_name].setup(server_opts)
-          end,
-        },
       })
+
+      for server, settings in pairs(servers) do
+        local server_opts = vim.tbl_deep_extend('force', {
+          capabilities = vim.deepcopy(capabilities),
+        }, settings or {})
+        vim.lsp.config(server, server_opts)
+        vim.lsp.enable(server)
+      end
     end,
   },
 }
