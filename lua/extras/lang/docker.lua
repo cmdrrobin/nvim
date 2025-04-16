@@ -1,0 +1,23 @@
+return {
+  recommended = {
+    ft = 'dockerfile',
+    root = { 'Dockerfile', 'docker-compose.yml', 'compose.yml', 'docker-compose.yaml', 'compose.yaml' },
+  },
+  {
+    'nvim-treesitter/nvim-treesitter',
+    opts = function(_, opts)
+      if type(opts.ensure_installed) == 'table' then
+        vim.list_extend(opts.ensure_installed, { 'dockerfile' })
+      end
+    end,
+  },
+  {
+    'williamboman/mason-lspconfig.nvim',
+    opts = {
+      ensure_installed = { 'dockerfile-language-server' },
+    },
+  },
+}
+
+-- The line beneath this is called `modeline`. See `:help modeline`
+-- vim: ts=2 sts=2 sw=2 et
