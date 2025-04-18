@@ -15,7 +15,7 @@ return {
   {
     'williamboman/mason-lspconfig.nvim',
     opts = {
-      ensure_installed = { 'terraform-ls' },
+      ensure_installed = { 'terraformls' },
     },
   },
   {
