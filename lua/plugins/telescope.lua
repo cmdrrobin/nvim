@@ -24,6 +24,7 @@ return {
       --  If you already have a Nerd Font, or terminal set up with fallback fonts
       --  you can enable this
       -- { 'nvim-tree/nvim-web-devicons' }
+      { 'echasnovski/mini.icons', opts = {} },
     },
     keys = function()
       --
@@ -106,7 +107,9 @@ return {
 
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
-      local actions = require('telescope.actions')
+      -- local actions = require('telescope.actions')
+
+      MiniIcons.mock_nvim_web_devicons()
 
       require('telescope').setup({
         -- You can put your default mappings / updates / etc. in here
