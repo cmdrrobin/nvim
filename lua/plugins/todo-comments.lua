@@ -1,4 +1,7 @@
 -- highlight and search for todo comments like `TODO`, `FIXME`, `HACK`, etc.
+
+---@module 'lazy'
+---@type LazySpec
 return {
   {
     'folke/todo-comments.nvim',

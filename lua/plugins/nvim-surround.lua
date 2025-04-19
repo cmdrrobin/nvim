@@ -1,4 +1,7 @@
 -- Is all about "surroundings": parentheses, brackets, quotes, XML tags, and more
+
+---@module 'lazy'
+---@type LazySpec
 return {
   'kylechui/nvim-surround',
   event = { 'BufReadPost', 'BufNewFile' },

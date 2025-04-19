@@ -1,4 +1,7 @@
 -- show context of current cursor position
+
+---@module 'lazy'
+---@type LazySpec
 return {
   'nvim-treesitter/nvim-treesitter',
   dependencies = {

@@ -1,5 +1,8 @@
 -- Undotree visualizes the undo history and makes it easy to browse and switch
 -- between different undo branches.
+
+---@module 'lazy'
+---@type LazySpec
 return {
   {
     'mbbill/undotree',

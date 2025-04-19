@@ -1,4 +1,7 @@
 -- enhanced builtin nvim comments
+
+---@module 'lazy'
+---@type LazySpec
 return {
   'folke/ts-comments.nvim',
   event = { 'BufReadPost' },

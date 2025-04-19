@@ -1,7 +1,11 @@
+---@module 'lazy'
+---@type LazySpec
 return {
   { -- Autoformat
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
+    ---@module 'conform.types'
+    ---@type conform.setupOpts
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
@@ -23,7 +27,7 @@ return {
             lsp_format = lsp_format_opt,
           }
         else
-          return false
+          return
         end
       end,
       formatters_by_ft = {

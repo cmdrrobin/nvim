@@ -24,6 +24,8 @@ local function get_args(config)
   return config
 end
 
+---@module 'lazy'
+---@type LazySpec
 return {
   -- NOTE: Yes, you can install new plugins here!
   'mfussenegger/nvim-dap',

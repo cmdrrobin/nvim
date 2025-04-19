@@ -1,9 +1,13 @@
+---@module 'lazy'
+---@type LazySpec
 return {
   {
     'williamboman/mason.nvim',
     cmd = 'Mason',
     build = ':MasonUpdate',
     opts_extend = { 'ensure_installed' },
+    ---@module 'mason.settings'
+    ---@type MasonSettings
     opts = {
       ensure_installed = {
         'stylua',

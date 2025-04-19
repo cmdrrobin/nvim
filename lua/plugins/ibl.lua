@@ -1,5 +1,7 @@
 local icons = require('icons')
 
+---@module 'lazy'
+---@type LazySpec
 return {
   { -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',

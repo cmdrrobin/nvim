@@ -1,3 +1,5 @@
+---@module 'lazy'
+---@type LazySpec
 return {
   -- Add a bunch of pre-configured snippets. Custom snippets can be added to
   -- the `snippets/` folder in the root of the project.
