@@ -5,6 +5,9 @@ return {
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     event = { 'BufReadPre', 'BufNewFile' },
+    ---@module 'gitsigns.config'
+    ---@type Gitsigns.Config
+    ---@diagnostic disable: missing-fields
     opts = {
       signs = {
         add = { text = '+' },

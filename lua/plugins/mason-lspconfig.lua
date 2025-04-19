@@ -9,6 +9,8 @@ return {
       { 'williamboman/mason.nvim' },
     },
     opts_extend = { 'ensure_installed' },
+    ---@module 'mason-lspconfig.settings'
+    ---@type MasonLspconfigSettings
     opts = {
       ensure_installed = { 'lua_ls' },
       automatic_installation = false,
