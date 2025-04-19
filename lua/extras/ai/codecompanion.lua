@@ -10,7 +10,7 @@ return {
     },
     keys = {
       { '<C-a>', '<cmd>CodeCompanionActions<cr>', mode = { 'n', 'v' } },
-      { '<leader>a', '<cmd>CodeCompanionChat Toggle<cr>' },
+      { '<leader>a', '<cmd>CodeCompanionChat Toggle<cr>', mode = { 'n', 'v' } },
     },
     opts = {
       strategies = {
