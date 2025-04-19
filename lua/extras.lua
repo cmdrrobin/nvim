@@ -63,7 +63,7 @@ function M.get_enabled_extras_spec()
 
   for _, extra in ipairs(M.get_available_extras()) do
     if preferences[extra.path] then
-      table.insert(specs, { import = 'extras.' .. extra.path })
+      table.insert(specs, { import = 'extras.' .. extra.path, optional = true })
     end
   end
 
