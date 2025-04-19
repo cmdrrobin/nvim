@@ -1,10 +1,14 @@
 ---@module 'lazy'
+
+-- Load Codecompanion extenion locally
+local codecompanion = require('plugins.lualine.extensions.codecompanion')
+
 ---@type LazySpec
 return {
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
-    event = 'VeryLazy',
+    event = 'UIEnter',
     -- See `:help lualine.txt`
     init = function()
       vim.g.lualine_laststatus = vim.o.laststatus
@@ -63,7 +67,7 @@ return {
           lualine_y = {},
           lualine_z = {},
         },
-        extensions = { 'fugitive', 'lazy', 'nvim-dap-ui', 'trouble' },
+        extensions = { codecompanion, 'fugitive', 'lazy', 'nvim-dap-ui', 'trouble', 'mason', 'oil', 'quickfix' },
       }
     end,
   },
