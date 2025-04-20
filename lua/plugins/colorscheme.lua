@@ -10,6 +10,8 @@ return {
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
     name = 'rose-pine',
+    ---@module 'rose-pine'
+    ---@type Options
     opts = {
       -- Differentiate between active and inactive windows and panels
       dim_inactive_windows = true,
