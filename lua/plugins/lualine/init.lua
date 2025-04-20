@@ -55,7 +55,7 @@ return {
           lualine_a = { 'mode' },
           lualine_b = { 'branch', 'diff', 'diagnostics' },
           lualine_c = { filename },
-          lualine_x = { spaces, 'filetype' },
+          lualine_x = { { 'lsp_status', color = 'StatusLineNC' }, spaces, 'filetype' },
           lualine_y = { 'location' },
           lualine_z = { 'progress' },
         },
