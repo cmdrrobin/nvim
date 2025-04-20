@@ -118,11 +118,6 @@ return {
         },
       },
 
-      -- use luasnip snippets
-      snippets = {
-        preset = 'luasnip',
-      },
-
       -- Disable command line completion
       cmdline = { enabled = false },
 
