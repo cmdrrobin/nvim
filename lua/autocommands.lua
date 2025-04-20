@@ -11,6 +11,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 -- Allow using q key to quit buffer for some filytypes
 vim.api.nvim_create_autocmd({ 'FileType' }, {
+  group = vim.api.nvim_create_augroup('cmdrrobin-close-with-q', { clear = true }),
   pattern = { 'qf', 'help', 'man', 'netrw', 'lspinfo', 'fugitive', 'git' },
   callback = function()
     vim.keymap.set('n', 'q', '<cmd>close<cr>', { buffer = true })
