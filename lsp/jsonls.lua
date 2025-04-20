@@ -4,6 +4,7 @@ return {
   filetypes = { 'json', 'jsonc' },
   init_options = {
     provideFormatter = true,
+    schemas = require('schemastore').json.schemas(),
   },
 }
 
