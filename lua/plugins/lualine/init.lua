@@ -1,6 +1,6 @@
 ---@module 'lazy'
 
--- Load Codecompanion extenion locally
+-- Load Codecompanion extension locally
 local codecompanion = require('plugins.lualine.extensions.codecompanion')
 
 ---@type LazySpec
@@ -31,6 +31,11 @@ return {
         shorting_target = 40,
       }
 
+      local lsp_status = {
+        'lsp_status',
+        color = 'StatusLineNC',
+      }
+
       -- show number of spaces that is used for current buffer with additional icon
       local spaces = {
         function()
@@ -55,7 +60,7 @@ return {
           lualine_a = { 'mode' },
           lualine_b = { 'branch', 'diff', 'diagnostics' },
           lualine_c = { filename },
-          lualine_x = { { 'lsp_status', color = 'StatusLineNC' }, spaces, 'filetype' },
+          lualine_x = { lsp_status, spaces, 'filetype' },
           lualine_y = { 'location' },
           lualine_z = { 'progress' },
         },

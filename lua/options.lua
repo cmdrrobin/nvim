@@ -77,8 +77,6 @@ vim.g.have_icons = true
 -- Set highlight on search
 vim.opt.hlsearch = true
 
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
 -- convert tabs to spaces
 vim.o.expandtab = true
 
@@ -110,6 +108,7 @@ vim.g.fileencoding = 'utf-8'
 vim.opt.laststatus = 3
 
 -- Always ignore the stupid MAC store file
-vim.opt.wildignore:append { '.DS_Store' }
+vim.opt.wildignore:append({ '.DS_Store' })
 
--- vim: sw=2 ts=2 et
+-- The line beneath this is called `modeline`. See `:help modeline`
+-- vim: ts=2 sts=2 sw=2 et
