@@ -85,57 +85,29 @@ function M.open_extras_ui()
     })
   end
 
-  -- Use telescope if available, otherwise fallback to vim.ui.select
-  if pcall(require, 'telescope') then
-    local pickers = require('telescope.pickers')
-    local finders = require('telescope.finders')
-    local conf = require('telescope.config').values
-    local actions = require('telescope.actions')
-    local action_state = require('telescope.actions.state')
+  local formatted_items = {}
+  for _, item in ipairs(items) do
+    table.insert(formatted_items, (item.enabled and '[x] ' or '[ ] ') .. item.path)
+  end
 
-    pickers
-      .new({}, {
-        prompt_title = 'Manage Extras',
-        finder = finders.new_table({
-          results = items,
-          entry_maker = function(entry)
-            return {
-              value = entry,
-              display = (entry.enabled and '[x] ' or '[ ] ') .. entry.path,
-              ordinal = entry.path,
-            }
-          end,
-        }),
-        sorter = conf.generic_sorter({}),
-        attach_mappings = function(prompt_bufnr)
-          actions.select_default:replace(function()
-            local selection = action_state.get_selected_entry()
-            local path = selection.value.path
-            -- Toggle enabled state
-            selection.value.enabled = not selection.value.enabled
-            preferences[path] = selection.value.enabled
-            M.save_preferences(preferences)
+  -- Use snacks if available, otherwise fallback to vim.ui.select
+  if pcall(require, 'snacks') then
+    local snacks = require('snacks')
 
-            -- Update the display text for the current entry
-            selection.display = (selection.value.enabled and '[x] ' or '[ ] ') .. path
+    snacks.picker.select(formatted_items, {
+      prompt = 'Select extras to toggle:',
+    }, function(choice, idx)
+      if not choice then
+        return
+      end
 
-            -- Refresh the picker display
-            local picker = action_state.get_current_picker(prompt_bufnr)
-            picker:refresh(picker.finder, { reset_prompt = false })
+      local path = items[idx].path
+      preferences[path] = not items[idx].enabled
+      M.save_preferences(preferences)
 
-            vim.notify('Extras preferences saved. Restart Neovim to apply changes.', vim.log.levels.INFO)
-          end)
-
-          return true
-        end,
-      })
-      :find()
+      vim.notify('Extras preferences saved. Restart Neovim to apply changes.', vim.log.levels.INFO)
+    end)
   else
-    local formatted_items = {}
-    for _, item in ipairs(items) do
-      table.insert(formatted_items, (item.enabled and '[x] ' or '[ ] ') .. item.path)
-    end
-
     vim.ui.select(formatted_items, {
       prompt = 'Select extras to toggle:',
     }, function(choice, idx)
