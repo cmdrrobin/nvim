@@ -54,7 +54,7 @@ return {
           globalstatus = vim.o.laststatus == 3,
           component_separators = { left = '|', right = '' },
           section_separators = '',
-          disabled_filetypes = { statusline = { 'dashboard', 'alpha', 'snacks_dashboard' } },
+          disabled_filetypes = { statusline = { 'dashboard', 'alpha', 'snacks_dashboard', 'snacks_picker_input' } },
         },
         sections = {
           lualine_a = { 'mode' },
