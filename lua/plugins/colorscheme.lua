@@ -26,6 +26,11 @@ return {
         TelescopeTitle = { fg = 'base', bg = 'love' },
         TelescopePromptTitle = { fg = 'base', bg = 'rose' },
         TelescopePreviewTitle = { fg = 'base', bg = 'iris' },
+
+        -- Give Snacks Picker titles own color
+        SnacksPickerTitle = { fg = 'base', bg = 'love' },
+        SnacksPickerInputTitle = { fg = 'base', bg = 'rose' },
+        SnacksPickerPreviewTitle = { fg = 'base', bg = 'iris' },
       },
     },
     config = function(_, opts)

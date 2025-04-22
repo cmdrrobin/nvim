@@ -27,7 +27,10 @@ return {
       },
     },
     explorer = { enabled = false },
-    indent = { animate = { enabled = false }, enabled = true },
+    indent = {
+      enabled = true,
+      animate = { enabled = false },
+    },
     input = { enabled = false },
     picker = { enabled = true },
     notifier = { enabled = false },
@@ -40,7 +43,7 @@ return {
   keys = {
     -- stylua: ignore start
     { '<leader>ff', function() Snacks.picker.files() end, desc = 'Find Files', },
-    { '<leader><leader>', function() Snacks.picker.buffers() end, desc = 'Buffers', },
+    { '<leader><space>', function() Snacks.picker.buffers() end, desc = 'Buffers', },
     { '<leader>fp', function() Snacks.picker.projects() end, desc = 'Projects' },
     { '<leader>fr', function() Snacks.picker.recent() end, desc = 'Recent' },
     { '<leader>fg', function() Snacks.picker.grep() end, desc = 'File Grep' },
