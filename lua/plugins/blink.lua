@@ -136,7 +136,25 @@ return {
       blink.setup(opts)
 
       -- Extend neovim's client capabilities with the completion ones.
-      vim.lsp.config('*', { capabilities = blink.get_lsp_capabilities(nil, true) })
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities = vim.tbl_deep_extend('force', capabilities, blink.get_lsp_capabilities(nil, false))
+
+      -- When required, add some custom capabilities settings
+      capabilities = vim.tbl_deep_extend('force', capabilities, {
+        textDocument = {
+          completion = {
+            completionItem = {
+              snippetSupport = true,
+            },
+          },
+          foldingRange = {
+            dynamicRegistration = false,
+            lineFoldingOnly = true,
+          },
+        },
+      })
+
+      vim.lsp.config('*', { capabilities = capabilities })
     end,
   },
 }
