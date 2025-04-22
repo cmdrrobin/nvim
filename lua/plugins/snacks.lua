@@ -1,5 +1,7 @@
 ---@module 'lazy'
 ---@type LazySpec
+
+-- A collection of small QoL plugins for Neovim
 return {
   'folke/snacks.nvim',
   priority = 1000,
@@ -11,9 +13,20 @@ return {
     -- or leave it empty to use the default settings
     -- refer to the configuration section below
     bigfile = { enabled = true },
+    -- replaces nvimdev/dashboard-nvim
     dashboard = {
       enabled = true,
       preset = {
+        header = table.concat({
+          [[ ██████   █████                                ███                  ]],
+          [[░░██████ ░░███                                ░░░                   ]],
+          [[ ░███░███ ░███   ██████   ██████  █████ █████ ████  █████████████   ]],
+          [[ ░███░░███░███  ███░░███ ███░░███░░███ ░░███ ░░███ ░░███░░███░░███  ]],
+          [[ ░███ ░░██████ ░███████ ░███ ░███ ░███  ░███  ░███  ░███ ░███ ░███  ]],
+          [[ ░███  ░░█████ ░███░░░  ░███ ░███ ░░███ ███   ░███  ░███ ░███ ░███  ]],
+          [[ █████  ░░█████░░██████ ░░██████   ░░█████    █████ █████░███ █████ ]],
+          [[░░░░░    ░░░░░  ░░░░░░   ░░░░░░     ░░░░░    ░░░░░ ░░░░░ ░░░ ░░░░░  ]],
+        }, '\n'),
         keys = {
           { icon = ' ', key = 'f', desc = 'Find File', action = ":lua Snacks.dashboard.pick('files')" },
           { icon = ' ', key = 'n', desc = 'New File', action = ':ene | startinsert' },
@@ -27,11 +40,13 @@ return {
       },
     },
     explorer = { enabled = false },
+    -- replaces lukas-reineke/indent-blankline.nvim
     indent = {
       enabled = true,
       animate = { enabled = false },
     },
     input = { enabled = false },
+    -- replaces nvim-telescope/telescope.nvim
     picker = { enabled = true },
     notifier = { enabled = false },
     quickfile = { enabled = true },
@@ -53,3 +68,6 @@ return {
     -- stylua: ignore end
   },
 }
+
+-- The line beneath this is called `modeline`. See `:help modeline`
+-- vim: ts=2 sts=2 sw=2 et
