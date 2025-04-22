@@ -47,7 +47,7 @@ vim.keymap.set('n', '<C-Right>', ':vertical resize +2<CR>', { silent = true })
 vim.keymap.set('n', '<S-q>', ':bd!<CR>') -- delete current buffer
 
 -- File Explorer
-vim.keymap.set('n', '<leader>pv', '<cmd>Oil<CR>', { desc = 'Open Netrw' })
+vim.keymap.set('n', '<leader>pv', '<cmd>Ex<CR>', { desc = 'Open Netrw' })
 
 -- Better paste
 vim.keymap.set({ 'v', 'x' }, '<leader>p', '"_dP')
