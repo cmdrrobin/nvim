@@ -28,6 +28,22 @@ return {
     },
     config = function(_, opts)
       require('mini.files').setup(opts)
+
+      -- Make it possible to enable preview window
+      -- https://github.com/echasnovski/mini.nvim/issues/1514
+      local toggle_preview = function()
+        MiniFiles.config.windows.preview = not MiniFiles.config.windows.preview
+        MiniFiles.refresh({})
+      end
+
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'MiniFilesBufferCreate',
+        callback = function(args)
+          local buf_id = args.data.buf_id
+          -- Tweak left-hand side of mapping to your liking
+          vim.keymap.set('n', 'gp', toggle_preview, { buffer = buf_id })
+        end,
+      })
     end,
   },
 }
