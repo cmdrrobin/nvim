@@ -45,6 +45,12 @@ return {
       enabled = true,
       animate = { enabled = false },
     },
+    image = {
+      enabled = false,
+      doc = {
+        inline = false,
+      },
+    },
     input = { enabled = false },
     -- replaces nvim-telescope/telescope.nvim
     picker = { enabled = true },
