@@ -1,10 +1,20 @@
+---@type (boolean|table)
+local schemas
+local schemastore_ok, schemastore = pcall(require, 'schemastore')
+if schemastore_ok then
+  schemas = schemastore.yaml.schemas()
+else
+  schemas = false
+end
+
 ---@type vim.lsp.Config
 return {
   cmd = { 'vscode-json-language-server', '--stdio' },
   filetypes = { 'json', 'jsonc' },
   init_options = {
     provideFormatter = true,
-    schemas = require('schemastore').json.schemas(),
+    schemas = not schemas and true or schemas,
+    validate = { enable = true },
   },
 }
 
