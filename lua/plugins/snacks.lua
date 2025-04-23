@@ -46,10 +46,7 @@ return {
       animate = { enabled = false },
     },
     image = {
-      enabled = false,
-      doc = {
-        inline = false,
-      },
+      enabled = vim.g.snacks_image,
     },
     input = { enabled = false },
     -- replaces nvim-telescope/telescope.nvim
@@ -73,6 +70,25 @@ return {
     { '<leader>gf', function() Snacks.picker.git_files() end, desc = 'Git Files' },
     -- stylua: ignore end
   },
+  config = function(_, opts)
+    require('snacks').setup(opts)
+
+    -- HACK(robin): when snacks image is disabled, do not try to load the image
+    -- in the picker previewer. Without the following function, it will trigger
+    -- error message.
+    -- https://github.com/folke/snacks.nvim/discussions/1787
+
+    -- Check if the file format is supported
+    ---@type function
+    local supports_file = require('snacks.image').supports_file
+    ---@param file string
+    Snacks.image.supports_file = function(file)
+      if not Snacks.image.config.enabled then
+        return false
+      end
+      return supports_file(file)
+    end
+  end,
 }
 
 -- The line beneath this is called `modeline`. See `:help modeline`

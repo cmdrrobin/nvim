@@ -65,12 +65,6 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
--- Enable format on save
-vim.g.format_on_save = true
-
--- Set to true if you want to show icons
-vim.g.have_icons = true
-
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -109,6 +103,18 @@ vim.opt.laststatus = 3
 
 -- Always ignore the stupid MAC store file
 vim.opt.wildignore:append({ '.DS_Store' })
+
+-- Custom settings
+
+-- Enable format on save
+vim.g.format_on_save = true
+
+-- Set to true if you want to show icons
+vim.g.have_icons = true
+
+-- Set Snacks image support
+-- This requires to have imagemagic on the host
+vim.g.snacks_image = true
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
