@@ -70,6 +70,9 @@ return {
 
           return sources
         end,
+
+        per_filetype = { gitcommit = { 'buffer', 'snippets' } },
+
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
           lsp = {
