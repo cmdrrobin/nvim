@@ -37,6 +37,10 @@ return {
       logLevel = 'error',
     },
   },
+  on_attach = function(client, _)
+    -- Disable hover in favor of (based)pyright
+    client.server_capabilities.hoverProvider = false
+  end,
   keys = {
     {
       '<leader>co',
