@@ -14,5 +14,8 @@ vim.api.nvim_create_user_command('ToggleFormat', function()
   vim.notify(string.format('%s formatting...', vim.g.format_on_save and 'Enabling' or 'Disabling'), vim.log.levels.INFO)
 end, { desc = 'Toggle conform.nvim auto-formatting', nargs = 0 })
 
+vim.api.nvim_create_user_command('GoToFile', 'lua Snacks.picker.smart()', { desc = 'Open smart file picker', nargs = 0 })
+vim.api.nvim_create_user_command('GoToNotes', 'ObsidianSearch', { desc = 'Search Obsidian notes', nargs = 0 })
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
