@@ -16,8 +16,6 @@ return {
       automatic_installation = false,
     },
     config = function(_, opts)
-      ---@module 'mason-lspconfig'
-      ---@type MasonLspconfigSettings
       require('mason-lspconfig').setup(opts)
 
       -- enable each LSP server

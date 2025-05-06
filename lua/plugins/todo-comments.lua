@@ -8,6 +8,9 @@ return {
     event = { 'BufReadPost', 'BufNewFile' },
     dependencies = 'nvim-lua/plenary.nvim',
     cmd = { 'TodoTrouble', 'TodoTelescope' },
+    ---@module 'todo-comments'
+    ---@type TodoOptions
+    ---@diagnostic disable-next-line: missing-fields
     opts = {
       signs = false,
       search = { pattern = [[\b(KEYWORDS)(\([^\)]*\))?:]] },

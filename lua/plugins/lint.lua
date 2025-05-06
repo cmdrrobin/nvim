@@ -21,7 +21,7 @@ return {
         -- annoying when (e.g.) entering a LSP hover window.
         -- Besides that, there is no point for linting on read-only buffers.
         -- They cannot be updated.
-        if vim.opt_local.modifiable:get() then
+        if vim.bo.modifiable then
           lint.try_lint()
         end
       end,
