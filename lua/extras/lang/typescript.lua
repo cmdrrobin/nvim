@@ -21,7 +21,7 @@ return {
   },
   -- Ensure Typescript tools are installed
   {
-    'williamboman/mason-lspconfig.nvim',
+    'mason-org/mason-lspconfig.nvim',
     opts = {
       ensure_installed = { 'typescript-language-server' },
     },

@@ -2,7 +2,7 @@
 ---@type LazySpec
 return {
   {
-    'williamboman/mason.nvim',
+    'mason-org/mason.nvim',
     cmd = 'Mason',
     build = ':MasonUpdate',
     opts_extend = { 'ensure_installed' },
@@ -14,10 +14,10 @@ return {
         'shfmt',
       },
     },
+    ---@param opts MasonSettings | {ensure_installed: string[]}
     config = function(_, opts)
       require('mason').setup(opts)
       local mr = require('mason-registry')
-
       mr:on('package:install:success', function()
         vim.defer_fn(function()
           -- trigger FileType event to possibly load this newly installed LSP server
@@ -28,19 +28,11 @@ return {
         end, 100)
       end)
 
-      -- check if packages need to be installed
       mr.refresh(function()
-        for _, pkg_name in ipairs(opts.ensure_installed) do
-          local pkg = mr.get_package(pkg_name)
+        for _, tool in ipairs(opts.ensure_installed) do
+          local pkg = mr.get_package(tool)
           if not pkg:is_installed() then
             pkg:install()
-          else
-            -- update installed package to latest version
-            pkg:check_new_version(function(success, result_or_err)
-              if success then
-                pkg:install({ version = result_or_err.latest_version })
-              end
-            end)
           end
         end
       end)

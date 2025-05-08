@@ -12,7 +12,7 @@ return {
     end,
   },
   {
-    'williamboman/mason-lspconfig.nvim',
+    'mason-org/mason-lspconfig.nvim',
     opts = {
       ensure_installed = { 'dockerls', 'docker_compose_language_service' },
     },

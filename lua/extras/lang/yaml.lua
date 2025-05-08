@@ -17,7 +17,7 @@ return {
     version = false, -- last release is way too old
   },
   {
-    'williamboman/mason-lspconfig.nvim',
+    'mason-org/mason-lspconfig.nvim',
     opts = {
       ensure_installed = { 'yamlls' },
     },

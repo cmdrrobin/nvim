@@ -15,13 +15,13 @@ return {
     end,
   },
   {
-    'williamboman/mason.nvim',
+    'mason-org/mason.nvim',
     opts = {
       ensure_installed = { 'mypy' },
     },
   },
   {
-    'williamboman/mason-lspconfig.nvim',
+    'mason-org/mason-lspconfig.nvim',
     opts = {
       ensure_installed = { 'basedpyright', 'ruff' },
     },

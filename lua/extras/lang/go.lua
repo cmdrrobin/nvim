@@ -9,13 +9,13 @@ return {
   },
   -- Ensure Go tools are installed
   {
-    'williamboman/mason.nvim',
+    'mason-org/mason.nvim',
     opts = {
       ensure_installed = { 'goimports', 'gofumpt' },
     },
   },
   {
-    'williamboman/mason-lspconfig.nvim',
+    'mason-org/mason-lspconfig.nvim',
     opts = {
       ensure_installed = { 'gopls' },
     },
