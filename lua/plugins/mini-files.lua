@@ -57,6 +57,39 @@ return {
           vim.keymap.set('n', 'gp', toggle_preview, { buffer = buf_id })
         end,
       })
+
+      -- HACK: Notify LSPs that a file got renamed or moved.
+      -- Borrowed this from snacks.nvim.
+      vim.api.nvim_create_autocmd('User', {
+        desc = 'Notify LSPs that a file was renamed',
+        pattern = { 'MiniFilesActionRename', 'MiniFilesActionMove' },
+        callback = function(args)
+          local changes = {
+            files = {
+              {
+                oldUri = vim.uri_from_fname(args.data.from),
+                newUri = vim.uri_from_fname(args.data.to),
+              },
+            },
+          }
+          local will_rename_method, did_rename_method = vim.lsp.protocol.Methods.workspace_willRenameFiles, vim.lsp.protocol.Methods.workspace_didRenameFiles
+          local clients = vim.lsp.get_clients()
+          for _, client in ipairs(clients) do
+            if client:supports_method(will_rename_method) then
+              local res = client:request_sync(will_rename_method, changes, 1000, 0)
+              if res and res.result then
+                vim.lsp.util.apply_workspace_edit(res.result, client.offset_encoding)
+              end
+            end
+          end
+
+          for _, client in ipairs(clients) do
+            if client:supports_method(did_rename_method) then
+              client:notify(did_rename_method, changes)
+            end
+          end
+        end,
+      })
     end,
   },
 }
