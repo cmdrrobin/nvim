@@ -5,15 +5,23 @@ return {
   root_markers = { '.luarc.json', vim.uv.cwd() },
   settings = {
     Lua = {
+      format = { enable = false },
       diagnostics = {
         globals = { 'vim', 'opt', 'cmd' },
       },
       completion = {
         callSnippet = 'Replace',
       },
-    },
-    runtime = {
-      version = 'LuaJIT',
+      runtime = {
+        version = 'LuaJIT',
+      },
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME,
+          '${3rd}/luv/library',
+        },
+      },
     },
   },
 }
