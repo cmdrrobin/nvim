@@ -7,28 +7,19 @@ return {
     'nvim-lua/plenary.nvim',
   },
   cmd = {
-    'ObsidianOpen',
-    'ObsidianNew',
-    'ObsidianQuickSwitch',
-    'ObsidianFollowLink',
-    'ObsidianBacklinks',
-    'ObsidianToday',
-    'ObsidianYesterday',
-    'ObsidianTemplate',
-    'ObsidianSearch',
-    'ObsidianLink',
-    'ObsidianLinkNew',
+    'Obsidian',
   },
   keys = {
-    { '<leader>on', '<cmd>ObsidianNew<CR>', desc = 'Obsidian: New Note' },
-    { '<leader>ot', '<cmd>ObsidianToday<CR>', desc = 'Obsidian: create/open daily note' },
-    { '<leader>oy', '<cmd>ObsidianYesterday<CR>', desc = 'Obsidian: create/open yesterday daily note' },
-    { '<leader>os', '<cmd>ObsidianSearch<CR>', desc = 'Obsidian: search notes' },
+    { '<leader>on', '<cmd>Obsidian new<CR>', desc = 'Obsidian: New Note' },
+    { '<leader>ot', '<cmd>Obsidian today<CR>', desc = 'Obsidian: create/open daily note' },
+    { '<leader>oy', '<cmd>Obsidian yesterday<CR>', desc = 'Obsidian: create/open yesterday daily note' },
+    { '<leader>os', '<cmd>Obsidian search<CR>', desc = 'Obsidian: search notes' },
   },
   ---@module 'obsidiam'
   ---@type obsidian.config.ClientOpts
   ---@diagnostic disable-next-line: missing-fields
   opts = {
+    legacy_commands = false,
     ui = {
       enable = false,
     },
