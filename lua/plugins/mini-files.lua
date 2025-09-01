@@ -4,6 +4,7 @@ return {
   {
     'echasnovski/mini.files',
     version = false,
+    enabled = false,
     opts = {
       mappings = {
         show_help = '?',
