@@ -1,7 +1,7 @@
 ---@module 'lazy'
 ---@type LazySpec
 return {
-  'echasnovski/mini.icons',
+  'nvim-mini/mini.icons',
   opts = {},
   config = function(_, opts)
     require('mini.icons').setup(opts)

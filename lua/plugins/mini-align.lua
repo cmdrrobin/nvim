@@ -3,7 +3,7 @@
 ---@module 'lazy'
 ---@type LazySpec
 return {
-  'echasnovski/mini.align',
+  'nvim-mini/mini.align',
   version = '*',
   event = { 'BufReadPre', 'BufNewFile' },
   opts = {},
