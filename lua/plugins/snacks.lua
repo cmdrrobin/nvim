@@ -47,6 +47,10 @@ return {
     },
     image = {
       enabled = vim.g.snacks_image,
+      -- NOTE(robin): disable image processing for docs
+      doc = {
+        enabled = false,
+      },
     },
     input = { enabled = false },
     -- replaces nvim-telescope/telescope.nvim
