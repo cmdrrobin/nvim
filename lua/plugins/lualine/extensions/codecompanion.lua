@@ -69,8 +69,8 @@ M.sections = {
   lualine_a = { 'mode' },
   lualine_c = { BufferName },
   lualine_x = { CodeCompanionProgress },
-  lualine_y = { 'progress' },
-  lualine_z = { 'location' },
+  lualine_y = {},
+  lualine_z = {},
 }
 
 M.filetypes = { 'codecompanion' }
