@@ -4,15 +4,6 @@ return {
     root = '.terraform',
   },
   {
-    'nvim-treesitter/nvim-treesitter',
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        'hcl',
-        'terraform',
-      })
-    end,
-  },
-  {
     'mason-org/mason-lspconfig.nvim',
     opts = {
       ensure_installed = { 'terraformls' },

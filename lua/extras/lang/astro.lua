@@ -10,14 +10,6 @@ return {
     },
   },
   {
-    'nvim-treesitter/nvim-treesitter',
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        'astro',
-      })
-    end,
-  },
-  {
     'mason-org/mason-lspconfig.nvim',
     opts = {
       ensure_installed = { 'astro-language-server' },

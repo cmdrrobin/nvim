@@ -4,14 +4,6 @@ return {
     root = '*.toml',
   },
   {
-    'nvim-treesitter/nvim-treesitter',
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        'toml',
-      })
-    end,
-  },
-  {
     'mason-org/mason-lspconfig.nvim',
     opts = {
       ensure_installed = { 'taplo' },

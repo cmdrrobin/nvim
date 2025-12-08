@@ -7,14 +7,6 @@ return {
     },
   },
   {
-    'nvim-treesitter/nvim-treesitter',
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        'python',
-      })
-    end,
-  },
-  {
     'mason-org/mason.nvim',
     opts = {
       ensure_installed = { 'mypy' },

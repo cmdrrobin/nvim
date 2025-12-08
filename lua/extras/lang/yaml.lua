@@ -2,14 +2,6 @@ return {
   recommended = {
     ft = 'yaml',
   },
-  {
-    'nvim-treesitter/nvim-treesitter',
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        'yaml',
-      })
-    end,
-  },
   -- yaml schema support
   {
     'b0o/SchemaStore.nvim',
