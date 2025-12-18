@@ -7,24 +7,9 @@ return {
     },
   },
   {
-    'mason-org/mason.nvim',
-    opts = {
-      ensure_installed = { 'mypy' },
-    },
-  },
-  {
     'mason-org/mason-lspconfig.nvim',
     opts = {
-      ensure_installed = { 'basedpyright', 'ruff' },
-    },
-  },
-  {
-    'mfussenegger/nvim-lint',
-    optional = true,
-    opts = {
-      linters_by_ft = {
-        python = { 'mypy' },
-      },
+      ensure_installed = { 'ty', 'ruff' },
     },
   },
   {
