@@ -43,7 +43,7 @@ return {
             treesitter_try_attach(buf, language)
           elseif vim.tbl_contains(available_parsers, language) then
             -- if a parser is available in `nvim-treesitter` enable it after ensuring it is installed
-            TS.install(language).install(language):await(function()
+            TS.install(language):await(function()
               treesitter_try_attach(buf, language)
             end)
           else
