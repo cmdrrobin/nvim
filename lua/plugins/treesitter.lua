@@ -18,13 +18,6 @@ return {
         end
         -- enables syntax highlighting and other treesitter features
         vim.treesitter.start(buf, language)
-
-        -- enables treesitter based folds
-        -- for more info on folds see `:help folds`
-        -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-
-        -- enables treesitter based indentation
-        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
       end
 
       local available_parsers = TS.get_available()
