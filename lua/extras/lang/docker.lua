@@ -6,7 +6,16 @@ return {
   {
     'mason-org/mason-lspconfig.nvim',
     opts = {
-      ensure_installed = { 'dockerls', 'docker_compose_language_service', 'hadolint' },
+      ensure_installed = { 'dockerls', 'docker_compose_language_service' },
+    },
+  },
+  {
+    'mfussenegger/nvim-linl',
+    optional = true,
+    opts = {
+      linters_by_tf = {
+        dockerfile = { 'hadolint' },
+      },
     },
   },
 }
