@@ -57,20 +57,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     --  For example, in C this would take you to the header
     map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
-    -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
-    ---@param client vim.lsp.Client
-    ---@param method vim.lsp.protocol.Method
-    ---@param bufnr? integer some lsp support methods only in specific files
-    ---@return boolean
-    local function client_supports_method(client, method, bufnr)
-      if vim.fn.has('nvim-0.11') == 1 then
-        return client:supports_method(method, bufnr)
-      else
-        ---@diagnostic disable-next-line: param-type-mismatch
-        return client.supports_method(method, { bufnr = bufnr })
-      end
-    end
-
     -- The following two autocommands are used to highlight references of the
     -- word under your cursor when your cursor rests there for a little while.
     --    See `:help CursorHold` for information about when this is executed
@@ -159,7 +145,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
 
 -- LspLog window in new tab
 vim.api.nvim_create_user_command('LspLog', function()
-  vim.cmd(('tabnew ' .. vim.lsp.get_log_path()))
+  vim.cmd(('tabnew ' .. vim.lsp.log.get_filename()))
 end, {})
 
 -- LspInfo -> checkhealth vim.lsp

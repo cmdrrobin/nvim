@@ -1,22 +1,10 @@
----@module 'lazy'
----@type LazySpec
-return {
-  {
-    -- Main LSP Configuration
-    'mason-org/mason-lspconfig.nvim',
-    event = { 'BufReadPre', 'BufNewFile' },
-    dependencies = {
-      { 'mason-org/mason.nvim' },
-    },
-    opts_extend = { 'ensure_installed' },
-    ---@module 'mason-lspconfig.settings'
-    ---@type MasonLspconfigSettings
-    opts = {
-      ensure_installed = { 'lua_ls' },
-      automatic_installation = false,
-    },
-  },
-}
+vim.pack.add({
+  'https://github.com/mason-org/mason-lspconfig.nvim',
+})
+
+require('mason-lspconfig').setup({
+  ensure_installed = { 'lua_ls', 'stylua', 'ruff', 'ty', 'bashls', 'gopls', 'ts_ls', 'jsonls' },
+})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

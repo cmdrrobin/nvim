@@ -1,14 +1,12 @@
----@module 'lazy'
----@type LazySpec
-return {
-  -- See `:help gitsigns` to understand what the configuration keys do
-  { -- Adds git related signs to the gutter, as well as utilities for managing changes
-    'lewis6991/gitsigns.nvim',
-    event = { 'BufReadPre', 'BufNewFile' },
+vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
+  once = true,
+  callback = function()
+    vim.pack.add({ 'https://github.com/lewis6991/gitsigns.nvim' })
+
     ---@module 'gitsigns.config'
     ---@type Gitsigns.Config
     ---@diagnostic disable: missing-fields
-    opts = {
+    require('gitsigns').setup({
       signs = {
         add = { text = '+' },
         change = { text = '~' },
@@ -55,9 +53,9 @@ return {
         vim.keymap.set('n', '<leader>td', require('gitsigns').preview_hunk_inline, { buffer = bufnr, desc = 'Toggle Deleted' })
         -- stylua: ignore start
       end,
-    },
-  },
-}
+    })
+  end,
+})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

@@ -1,13 +1,13 @@
 -- Is all about "surroundings": parentheses, brackets, quotes, XML tags, and more
-
----@module 'lazy'
----@type LazySpec
-return {
-  'kylechui/nvim-surround',
-  event = { 'BufReadPost', 'BufNewFile' },
-  version = '*', -- Use for stability; omit to use `main` branch for the latest features
-  config = true,
-}
+vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
+  once = true,
+  callback = function()
+    vim.pack.add({
+      { src = 'https://github.com/kylechui/nvim-surround', version = vim.version.range('*') },
+    })
+    require('nvim-surround').setup()
+  end,
+})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
