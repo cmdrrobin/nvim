@@ -30,9 +30,13 @@ require('lsp')
 require('plugins.nvim-lspconfig')
 require('plugins.mason')
 require('plugins.mason-lspconfig')
+
+--[[ Coding ]]
 require('plugins.blink')
 require('plugins.conform')
 require('plugins.lint')
+require('plugins.schemastore')
+require('plugins.venv-selector')
 
 --[[ Other ]]
 require('plugins.lualine')
@@ -49,7 +53,5 @@ require('plugins.fugitive')
 require('plugins.gitsigns')
 require('plugins.trouble')
 require('plugins.nvim-tmux-navigation')
-require('plugins.schemastore')
-require('plugins.venv-selector')
 
 -- vim: sw=2 ts=2 et
