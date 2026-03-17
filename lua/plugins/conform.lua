@@ -1,6 +1,4 @@
-vim.pack.add({
-  'https://github.com/stevearc/conform.nvim'
-})
+vim.pack.add({ 'https://github.com/stevearc/conform.nvim' })
 
 ---@module 'conform.types'
 ---@type conform.setupOpts
@@ -30,6 +28,8 @@ require('conform').setup({
   end,
   formatters_by_ft = {
     lua = { 'stylua' },
+    go = { 'goimports', 'gofumpt' },
+    dockerfile = { 'hadolint' },
   },
 })
 
