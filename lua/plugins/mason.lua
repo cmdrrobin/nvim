@@ -8,6 +8,7 @@ local opts = {
     'gofumpt',
     'hadolint',
     'markdownlint-cli2',
+    'ansible-lint',
   },
 }
 

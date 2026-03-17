@@ -7,7 +7,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
 
     lint.linters_by_ft = {
       markdown = { 'markdownlint-cli2' },
-      ansible = { 'ansible-lint' },
+      ansible = { 'ansible_lint' },
     }
 
     local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
@@ -22,6 +22,24 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
         end
       end,
     })
+
+    -- add LinterInfo to display active linters
+    vim.api.nvim_create_user_command('LinterInfo', function()
+      local runningLinters = table.concat(require('lint').linters_by_ft[vim.bo.filetype] or {}, '\n')
+      if runningLinters == '' then
+        runningLinters = 'No linters available'
+      end
+      vim.notify(runningLinters, vim.log.levels.INFO, { title = 'nvim-lint' })
+    end, {})
+
+    -- add LinterRunning to show active running linters
+    vim.api.nvim_create_user_command('LinterRunning', function()
+      local runningLinters = table.concat(require('lint').get_running() or {}, '\n')
+      if runningLinters == '' then
+        runningLinters = 'No running linters'
+      end
+      vim.notify(runningLinters, vim.log.levels.INFO, { title = 'nvim-lint' })
+    end, {})
   end,
 })
 
