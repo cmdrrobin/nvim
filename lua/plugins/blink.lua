@@ -1,9 +1,13 @@
 vim.pack.add({
-  { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.x") },
-  "https://github.com/rafamadriz/friendly-snippets",
+  { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') },
 })
 
-local blink = require("blink.cmp")
+-- Collect snippets later
+vim.schedule(function()
+  vim.pack.add({ 'https://github.com/rafamadriz/friendly-snippets' })
+end)
+
+local blink = require('blink.cmp')
 blink.setup({
   -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
   -- 'super-tab' for mappings similar to vscode (tab to accept)
@@ -17,7 +21,7 @@ blink.setup({
   -- C-k: Toggle signature help (if signature.enabled = true)
   --
   -- See :h blink-cmp-config-keymap for defining your own keymap
-  keymap = { preset = "enter" },
+  keymap = { preset = 'enter' },
 
   completion = {
     -- prefer always to view documentation
@@ -25,11 +29,11 @@ blink.setup({
       auto_show = true,
       auto_show_delay_ms = 200,
       window = {
-        border = "padded",
+        border = 'padded',
       },
     },
     menu = {
-      border = "padded",
+      border = 'padded',
     },
   },
 
@@ -38,53 +42,53 @@ blink.setup({
   sources = {
     -- Disable some sources in comments and strings.
     default = function()
-      local sources = { "lsp", "buffer" }
+      local sources = { 'lsp', 'buffer' }
       local ok, node = pcall(vim.treesitter.get_node)
 
       if ok and node then
-        if not vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type()) then
-          table.insert(sources, "path")
+        if not vim.tbl_contains({ 'comment', 'line_comment', 'block_comment' }, node:type()) then
+          table.insert(sources, 'path')
         end
-        if node:type() ~= "string" then
-          table.insert(sources, "snippets")
+        if node:type() ~= 'string' then
+          table.insert(sources, 'snippets')
         end
       end
 
       return sources
     end,
 
-    per_filetype = { gitcommit = { "buffer", "snippets" } },
+    per_filetype = { gitcommit = { 'buffer', 'snippets' } },
 
     providers = {
       lsp = {
-        name = "lsp",
+        name = 'lsp',
         enabled = true,
-        module = "blink.cmp.sources.lsp",
+        module = 'blink.cmp.sources.lsp',
         score_offset = 90, -- the higher the number, the higher the priority
       },
       path = {
-        name = "Path",
+        name = 'Path',
         enabled = true,
-        module = "blink.cmp.sources.path",
+        module = 'blink.cmp.sources.path',
         score_offset = 25,
         -- When typing a path, I would get snippets and text in the
         -- suggestions, I want those to show only if there are no path
         -- suggestions
-        fallbacks = { "snippets", "buffer" },
+        fallbacks = { 'snippets', 'buffer' },
         opts = {
           trailing_slash = false,
           label_trailing_slash = true,
           get_cwd = function(context)
-            return vim.fn.expand(("#%d:p:h"):format(context.bufnr))
+            return vim.fn.expand(('#%d:p:h'):format(context.bufnr))
           end,
           show_hidden_files_by_default = true,
         },
       },
       buffer = {
-        name = "Buffer",
+        name = 'Buffer',
         enabled = true,
         max_items = 3,
-        module = "blink.cmp.sources.buffer",
+        module = 'blink.cmp.sources.buffer',
         min_keyword_length = 2,
         score_offset = 15, -- the higher the number, the higher the priority
       },
@@ -97,7 +101,7 @@ blink.setup({
     enabled = true,
     -- do not show documentation when viewing signatures
     window = {
-      border = "solid",
+      border = 'solid',
       show_documentation = false,
     },
   },
@@ -107,15 +111,15 @@ blink.setup({
 
   -- use Rust when available, or fallback to lua
   -- Could use `prefer_rust`, which do the same, but without warning
-  fuzzy = { implementation = "prefer_rust_with_warning" },
+  fuzzy = { implementation = 'prefer_rust_with_warning' },
 })
 
 -- Extend neovim's client capabilities with the completion ones.
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = vim.tbl_deep_extend("force", capabilities, blink.get_lsp_capabilities(nil, false))
+capabilities = vim.tbl_deep_extend('force', capabilities, blink.get_lsp_capabilities(nil, false))
 
 -- When required, add some custom capabilities settings
-capabilities = vim.tbl_deep_extend("force", capabilities, {
+capabilities = vim.tbl_deep_extend('force', capabilities, {
   textDocument = {
     completion = {
       completionItem = {
@@ -129,7 +133,7 @@ capabilities = vim.tbl_deep_extend("force", capabilities, {
   },
 })
 
-vim.lsp.config("*", { capabilities = capabilities })
+vim.lsp.config('*', { capabilities = capabilities })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
