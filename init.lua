@@ -27,6 +27,7 @@ require('plugins.oil')
 
 --[[ LSP ]]
 require('lsp')
+require('plugins.nvim-lspconfig')
 require('plugins.mason')
 require('plugins.mason-lspconfig')
 require('plugins.blink')
