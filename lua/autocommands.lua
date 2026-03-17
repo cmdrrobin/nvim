@@ -44,5 +44,18 @@ vim.api.nvim_create_autocmd('TermOpen', {
   end,
 })
 
+-- Set yaml.ansible filetype when .ansible-lint or ansible.cfg exists in project
+vim.api.nvim_create_autocmd('FileType', {
+  group = vim.api.nvim_create_augroup('cmdrrobin-ansible-detect', { clear = true }),
+  pattern = 'yaml',
+  callback = function()
+    local search_path = vim.fn.expand('%:p:h') .. ';'
+    local ansible_files = vim.fn.findfile('.ansible-lint', search_path) or vim.fn.findfile('ansible.cfg', search_path)
+    if ansible_files ~= '' then
+      vim.bo.filetype = 'yaml.ansible'
+    end
+  end,
+})
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
