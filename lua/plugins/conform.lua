@@ -1,9 +1,10 @@
 vim.pack.add({ 'https://github.com/stevearc/conform.nvim' })
 
 local formatters_by_ft = {
-  lua = { 'stylua' },
-  go = { 'goimports', 'gofumpt' },
   dockerfile = { 'hadolint' },
+  go = { 'goimports', 'gofumpt' },
+  lua = { 'stylua' },
+  python = { 'ruff' },
   terraform = { 'terraform_fmt' },
   tf = { 'terraform_fmt' },
   ['terraform-vars'] = { 'terraform_fmt' },
