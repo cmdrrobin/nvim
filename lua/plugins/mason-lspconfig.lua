@@ -3,7 +3,21 @@ vim.pack.add({
 })
 
 require('mason-lspconfig').setup({
-  ensure_installed = { 'lua_ls', 'stylua', 'ruff', 'ty', 'bashls', 'gopls', 'ts_ls', 'jsonls' },
+  ensure_installed = {
+    'lua_ls',
+    'stylua',
+    'ruff',
+    'ty',
+    'bashls',
+    'gopls',
+    'ts_ls',
+    'jsonls',
+    'dockerls',
+    'docker_compose_language_service',
+    'taplo',
+    'yamlls',
+    'ansiblels',
+  },
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
