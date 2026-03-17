@@ -1,5 +1,14 @@
 vim.pack.add({ 'https://github.com/stevearc/conform.nvim' })
 
+local formatters_by_ft = {
+  lua = { 'stylua' },
+  go = { 'goimports', 'gofumpt' },
+  dockerfile = { 'hadolint' },
+  terraform = { 'terraform_fmt' },
+  tf = { 'terraform_fmt' },
+  ['terraform-vars'] = { 'terraform_fmt' },
+}
+
 ---@module 'conform.types'
 ---@type conform.setupOpts
 require('conform').setup({
@@ -26,11 +35,7 @@ require('conform').setup({
       return
     end
   end,
-  formatters_by_ft = {
-    lua = { 'stylua' },
-    go = { 'goimports', 'gofumpt' },
-    dockerfile = { 'hadolint' },
-  },
+  formatters_by_ft = formatters_by_ft,
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`

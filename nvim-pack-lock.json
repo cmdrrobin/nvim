@@ -1,5 +1,9 @@
 {
   "plugins": {
+    "SchemaStore.nvim": {
+      "rev": "157fa3f37a3be55ceb375274e2f3ea2d7d2f9ef6",
+      "src": "https://github.com/b0o/SchemaStore.nvim"
+    },
     "blink.cmp": {
       "rev": "451168851e8e2466bc97ee3e026c3dcb9141ce07",
       "src": "https://github.com/saghen/blink.cmp",
@@ -98,6 +102,10 @@
     "undotree": {
       "rev": "6fa6b57cda8459e1e4b2ca34df702f55242f4e4d",
       "src": "https://github.com/mbbill/undotree"
+    },
+    "venv-selector.nvim": {
+      "rev": "42e8faadf9b819654f29eb1a785797a3a328f301",
+      "src": "https://github.com/linux-cultist/venv-selector.nvim"
     },
     "vim-fugitive": {
       "rev": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0",
