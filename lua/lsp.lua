@@ -100,34 +100,18 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 -- Diagnostic Config
 -- See :help vim.diagnostic.Opts
-local diagnostic_icons = require('icons').diagnostics
-
 vim.diagnostic.config({
+  update_in_insert = false,
   severity_sort = true,
   float = { border = 'rounded', source = 'if_many' },
-  underline = { severity = vim.diagnostic.severity.ERROR },
-  signs = vim.g.have_icons and {
-    text = {
-      [vim.diagnostic.severity.ERROR] = diagnostic_icons.Error,
-      [vim.diagnostic.severity.WARN] = diagnostic_icons.Warning,
-      [vim.diagnostic.severity.INFO] = diagnostic_icons.Information,
-      [vim.diagnostic.severity.HINT] = diagnostic_icons.Hint,
-    },
-  } or {},
-  virtual_text = {
-    source = 'if_many',
-    spacing = 4,
-    prefix = '●',
-    format = function(diagnostic)
-      local diagnostic_message = {
-        [vim.diagnostic.severity.ERROR] = diagnostic.message,
-        [vim.diagnostic.severity.WARN] = diagnostic.message,
-        [vim.diagnostic.severity.INFO] = diagnostic.message,
-        [vim.diagnostic.severity.HINT] = diagnostic.message,
-      }
-      return diagnostic_message[diagnostic.severity]
-    end,
-  },
+  underline = { severity = { min = vim.diagnostic.severity.WARN } },
+
+  -- Can switch between these as you prefer
+  virtual_text = false, -- Text shows up at the end of the line
+  virtual_lines = false, -- Text shows up underneath the line, with virtual lines
+
+  -- Auto open the float, so you can easily read the errors when jumping with `[d` and `]d`
+  jump = { float = true },
 })
 
 -- Load LSP configs and capabilities when opening or creating a new file.
