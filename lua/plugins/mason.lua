@@ -4,6 +4,7 @@ vim.pack.add({
 
 -- List of linter services
 local opts = {
+  ---@type table<string>
   ensure_installed = {
     'stylua',
     'shfmt',

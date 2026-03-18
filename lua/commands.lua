@@ -17,6 +17,7 @@ end, { desc = 'Toggle conform.nvim auto-formatting', nargs = 0 })
 vim.api.nvim_create_user_command('GoToFile', 'lua Snacks.picker.smart()', { desc = 'Open smart file picker', nargs = 0 })
 vim.api.nvim_create_user_command('GoToNotes', 'ObsidianSearch', { desc = 'Search Obsidian notes', nargs = 0 })
 
+-- Get _all_ packages that are currently installed and available
 local function complete_packages()
   return vim
     .iter(vim.pack.get())
@@ -26,6 +27,7 @@ local function complete_packages()
     :totable()
 end
 
+-- Get all inactive packages that are currently available
 local function inactive_packages()
   return vim
     .iter(vim.pack.get())
