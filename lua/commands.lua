@@ -26,6 +26,18 @@ local function complete_packages()
     :totable()
 end
 
+local function inactive_packages()
+  return vim
+    .iter(vim.pack.get())
+    :filter(function(pack)
+      return not pack.active
+    end)
+    :map(function(pack)
+      return pack.spec.name
+    end)
+    :totable()
+end
+
 vim.api.nvim_create_user_command('PackList', function()
   vim.pack.update(nil, { offline = true })
 end, { desc = 'List Packages', nargs = 0 })
@@ -37,7 +49,7 @@ vim.api.nvim_create_user_command('PackUpdate', function(info)
     vim.pack.update(nil, { force = info.bang })
   end
 end, {
-  desc = 'Update packages',
+  desc = 'Update package(s)',
   nargs = '*',
   bang = true,
   complete = complete_packages,
@@ -50,7 +62,7 @@ vim.api.nvim_create_user_command('PackSync', function(info)
     vim.pack.update(nil, { target = 'lockfile', force = info.bang })
   end
 end, {
-  desc = 'Sync package(s)',
+  desc = 'Sync package(s) with lockfile',
   nargs = '*',
   bang = true,
   complete = complete_packages,
@@ -59,10 +71,10 @@ end, {
 vim.api.nvim_create_user_command('PackDelete', function(info)
   vim.pack.del(info.fargs, { force = info.bang })
 end, {
-  desc = 'Delete packages',
+  desc = 'Delete inactive package(s)',
   nargs = '+',
   bang = true,
-  complete = complete_packages,
+  complete = inactive_packages,
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
