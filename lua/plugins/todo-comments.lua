@@ -7,6 +7,8 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
       'https://github.com/nvim-lua/plenary.nvim',
     })
 
+    -- Allow keyword comments with owner. e.g.
+    -- KEYWORD(robin): this is a message
     require('todo-comments').setup({
       signs = false,
       search = { pattern = [[\b(KEYWORDS)(\([^\)]*\))?:]] },
