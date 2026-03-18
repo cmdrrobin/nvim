@@ -13,6 +13,7 @@ local opts = {
     'hadolint',
     'markdownlint-cli2',
     'ansible-lint',
+    'prettier',
   },
 }
 

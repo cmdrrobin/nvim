@@ -79,7 +79,7 @@ return {
     yaml = {
       keyOrdering = false,
       format = {
-        enable = true,
+        enable = false,
       },
       validate = true,
       schemaStore = {
