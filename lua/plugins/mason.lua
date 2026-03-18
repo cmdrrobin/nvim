@@ -1,4 +1,7 @@
-vim.pack.add({ 'https://github.com/mason-org/mason.nvim' })
+vim.pack.add({
+  { src = 'https://github.com/mason-org/mason.nvim', data = { build = 'MasonUpdate' } },
+})
+
 -- List of linter services
 local opts = {
   ensure_installed = {

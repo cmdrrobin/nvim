@@ -57,5 +57,22 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+-- Run commands when packages has been updated
+vim.api.nvim_create_autocmd('PackChanged', {
+  group = vim.api.nvim_create_augroup('cmdrrobin.plugin.install', {}),
+  callback = function(ev)
+    local name, kind = ev.data.spec.name, ev.data.kind
+    if kind ~= 'install' and kind ~= 'update' then
+      return
+    end
+    if (ev.data.spec.data or {}).build then
+      if not ev.data.active then
+        vim.cmd.packadd(name)
+      end
+      vim.cmd(ev.data.spec.data.build)
+    end
+  end,
+})
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
