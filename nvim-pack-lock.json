@@ -55,7 +55,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "dc2f86d2b66a6e01a98c37cdadd3be3e90f8ab9a",
+      "rev": "702f69fb167e9119f14adc4dfd4fcadf4d1b07a0",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-surround": {
@@ -64,7 +64,7 @@
       "version": ">=0.0.0"
     },
     "nvim-treesitter": {
-      "rev": "2cc172c28e5550e00e6beead4599b1469469c1c7",
+      "rev": "2b50ab5ccbcd9e5708deb351308edd738adbf84c",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-treesitter-context": {
