@@ -9,6 +9,8 @@ local formatters_by_ft = {
   tf = { 'terraform_fmt' },
   ['terraform-vars'] = { 'terraform_fmt' },
   yaml = { 'prettier' },
+  -- For filetypes without a formatter
+  ['_'] = { 'trim_whitespace', 'trim_newlines' },
 }
 
 ---@module 'conform.types'
