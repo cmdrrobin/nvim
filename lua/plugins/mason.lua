@@ -13,7 +13,7 @@ local ensure_installed = {
 
 vim.pack.add({
   { src = 'https://github.com/mason-org/mason.nvim', data = { build = 'MasonUpdate' } },
-})
+}, { confirm = false })
 
 require('mason').setup()
 

@@ -1,4 +1,4 @@
-vim.pack.add({ 'https://github.com/folke/snacks.nvim' })
+vim.pack.add({ 'https://github.com/folke/snacks.nvim' }, { confirm = false })
 
 ---@module 'snacks'
 ---@type snacks.Config
@@ -11,8 +11,8 @@ require('snacks').setup({
   dashboard = {
     enabled = true,
     sections = {
-      { section = "header" },
-      { section = "keys",  gap = 1, padding = 1 },
+      { section = 'header' },
+      { section = 'keys', gap = 1, padding = 1 },
     },
     preset = {
       header = table.concat({

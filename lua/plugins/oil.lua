@@ -1,7 +1,7 @@
 vim.pack.add({
   'https://github.com/stevearc/oil.nvim',
   'https://github.com/benomahony/oil-git.nvim',
-})
+}, { confirm = false })
 ---@module 'oil'
 ---@type oil.SetupOpts
 require('oil').setup({

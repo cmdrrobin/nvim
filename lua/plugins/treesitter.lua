@@ -1,6 +1,6 @@
 vim.pack.add({
   { src = 'https://github.com/nvim-treesitter/nvim-treesitter', data = { build = 'TSUpdate' } },
-})
+}, { confirm = false })
 
 local TS = require('nvim-treesitter')
 

@@ -16,7 +16,7 @@ local ensure_installed = {
   'ansiblels',
 }
 
-vim.pack.add({ 'https://github.com/mason-org/mason-lspconfig.nvim' })
+vim.pack.add({ 'https://github.com/mason-org/mason-lspconfig.nvim' }, { confirm = false })
 
 require('mason-lspconfig').setup({
   ensure_installed = ensure_installed,
