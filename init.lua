@@ -16,7 +16,6 @@ require('options')
 require('keymaps')
 require('autocommands')
 require('commands')
-require('icons')
 
 -- [[ Plugins ]]
 require('plugins.colorscheme')
