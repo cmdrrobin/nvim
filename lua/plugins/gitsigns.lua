@@ -17,30 +17,24 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
       on_attach = function(bufnr)
         local gs = package.loaded.gitsigns
 
-        local function map(mode, l, r, opts)
-          opts = opts or {}
-          opts.buffer = bufnr
-          vim.keymap.set(mode, l, r, opts)
-        end
-
         -- Navigation
-        -- stylua: ignore start
-        map('n', ']c', function()
+        vim.keymap.set('n', ']c', function()
           if vim.wo.diff then
-            vim.cmd.normal({']c', bang = true})
+            vim.cmd.normal({ ']c', bang = true })
           else
             gs.nav_hunk('next')
           end
         end, { desc = 'Jump to next git [c]hange' })
 
-        map('n', '[c', function()
+        vim.keymap.set('n', '[c', function()
           if vim.wo.diff then
-            vim.cmd.normal({'[c', bang = true})
+            vim.cmd.normal({ '[c', bang = true })
           else
             gs.nav_hunk('prev')
           end
         end, { desc = 'Jump to previous git [c]hange' })
 
+        -- stylua: ignore start
         vim.keymap.set('n', '<leader>hs', require('gitsigns').stage_hunk, { buffer = bufnr, desc = 'Stage Hunk' })
         vim.keymap.set('n', '<leader>hr', require('gitsigns').reset_hunk, { buffer = bufnr, desc = 'Reset Hunk' })
         vim.keymap.set('n', '<leader>hS', require('gitsigns').stage_buffer, { buffer = bufnr, desc = 'Stage Buffer' })

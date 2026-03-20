@@ -1,3 +1,9 @@
+-- Define linters based on filetype
+local linters_by_ft = {
+  markdown = { 'markdownlint-cli2' },
+  ansible = { 'ansible_lint' },
+}
+
 vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
   once = true,
   callback = function()
@@ -5,14 +11,10 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
 
     local lint = require('lint')
 
-    lint.linters_by_ft = {
-      markdown = { 'markdownlint-cli2' },
-      ansible = { 'ansible_lint' },
-    }
+    lint.linters_by_ft = linters_by_ft
 
-    local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
     vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
-      group = lint_augroup,
+      group = vim.api.nvim_create_augroup('lint', { clear = true }),
       callback = function()
         -- Only run the linter in buffers that you can modify in order to
         -- avoid superfluous noise, notably within the handy LSP pop-ups that

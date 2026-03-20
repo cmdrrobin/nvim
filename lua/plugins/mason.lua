@@ -1,21 +1,19 @@
+-- List of formatters and/or linters that need to be installed
+---@type table<string>
+local ensure_installed = {
+  'stylua',
+  'shfmt',
+  'goimports',
+  'gofumpt',
+  'hadolint',
+  'markdownlint-cli2',
+  'ansible-lint',
+  'prettier',
+}
+
 vim.pack.add({
   { src = 'https://github.com/mason-org/mason.nvim', data = { build = 'MasonUpdate' } },
 })
-
--- List of linter services
-local opts = {
-  ---@type table<string>
-  ensure_installed = {
-    'stylua',
-    'shfmt',
-    'goimports',
-    'gofumpt',
-    'hadolint',
-    'markdownlint-cli2',
-    'ansible-lint',
-    'prettier',
-  },
-}
 
 require('mason').setup()
 
@@ -30,7 +28,7 @@ mr:on('package:install:success', function()
 end)
 
 mr.refresh(function()
-  for _, tool in ipairs(opts.ensure_installed) do
+  for _, tool in ipairs(ensure_installed) do
     local pkg = mr.get_package(tool)
     if not pkg:is_installed() then
       pkg:install()

@@ -1,5 +1,4 @@
-vim.pack.add({ 'https://github.com/stevearc/conform.nvim' })
-
+-- Define formatting based on filetype
 local formatters_by_ft = {
   dockerfile = { 'hadolint' },
   go = { 'goimports', 'gofumpt' },
@@ -12,6 +11,11 @@ local formatters_by_ft = {
   -- For filetypes without a formatter
   ['_'] = { 'trim_whitespace', 'trim_newlines' },
 }
+-- Disable "format_on_save lsp_fallback" for languages that don't
+-- have a well standardized coding style.
+local disable_filetypes = { c = true, cpp = true }
+
+vim.pack.add({ 'https://github.com/stevearc/conform.nvim' })
 
 ---@module 'conform.types'
 ---@type conform.setupOpts
@@ -21,10 +25,6 @@ require('conform').setup({
     -- You can disable temporarely the format on save by setting by
     -- setting vim.g.format_on_save to false.
     if vim.g.format_on_save then
-      -- Disable "format_on_save lsp_fallback" for languages that don't
-      -- have a well standardized coding style. You can add additional
-      -- languages here or re-enable it for the disabled ones.
-      local disable_filetypes = { c = true, cpp = true }
       local lsp_format_opt
       if disable_filetypes[vim.bo[bufnr].filetype] then
         lsp_format_opt = 'never'

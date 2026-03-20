@@ -3,8 +3,8 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
   once = true,
   callback = function()
     vim.pack.add({
-      'https://github.com/folke/todo-comments.nvim',
       'https://github.com/nvim-lua/plenary.nvim',
+      'https://github.com/folke/todo-comments.nvim',
     })
 
     -- Allow keyword comments with owner. e.g.
