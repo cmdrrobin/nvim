@@ -5,7 +5,7 @@ vim.api.nvim_create_autocmd('PackChanged', {
 
     -- Run build script after plugin's code has changed
     if name == 'markdown-preview.nvim' and (kind == 'install' or kind == 'update') then
-      vim.system({ 'cd app && npm install' }, { cwd = ev.data.path })
+      vim.system({ 'npx', '--yes', 'yarn', 'install' }, { cwd = ev.data.path .. '/app' })
     end
   end,
 })
