@@ -75,14 +75,15 @@ Snacks.image.supports_file = function(file)
 end
 
 -- stylua: ignore start
-vim.keymap.set('n', '<leader>ff', function() Snacks.picker.files() end, { desc = 'Find Files' })
+vim.keymap.set('n', '<leader>ff', function() Snacks.picker.files() end, { desc = '[F]ind [F]iles' })
 vim.keymap.set('n', '<leader><space>', function() Snacks.picker.buffers() end, { desc = 'Buffers' })
-vim.keymap.set('n', '<leader>fp', function() Snacks.picker.projects() end, { desc = 'Projects' })
-vim.keymap.set('n', '<leader>fr', function() Snacks.picker.recent() end, { desc = 'Recent' })
-vim.keymap.set('n', '<leader>fg', function() Snacks.picker.grep() end, { desc = 'File Grep' })
-vim.keymap.set('n', '<leader>gb', function() Snacks.picker.git_branches() end, { desc = 'Git Branches' })
-vim.keymap.set('n', '<leader>gc', function() Snacks.picker.git_log() end, { desc = 'Git Log' })
-vim.keymap.set('n', '<leader>gf', function() Snacks.picker.git_files() end, { desc = 'Git Files' })
+vim.keymap.set('n', '<leader>fp', function() Snacks.picker.projects() end, { desc = '[F]ind [P]rojects' })
+vim.keymap.set('n', '<leader>fr', function() Snacks.picker.recent() end, { desc = '[F]ind [R]ecent' })
+vim.keymap.set('n', '<leader>fg', function() Snacks.picker.grep() end, { desc = '[F]ile [G]rep' })
+vim.keymap.set('n', '<leader>fk', function() Snacks.picker.keymaps() end, { desc = '[F]ind [K]eymaps' })
+vim.keymap.set('n', '<leader>gb', function() Snacks.picker.git_branches() end, { desc = '[G]it [B]ranches' })
+vim.keymap.set('n', '<leader>gc', function() Snacks.picker.git_log() end, { desc = '[G]it [C]ommits' })
+vim.keymap.set('n', '<leader>gf', function() Snacks.picker.git_files() end, { desc = '[G]it [F]iles' })
 -- stylua: ignore end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
