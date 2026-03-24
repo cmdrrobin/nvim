@@ -5,8 +5,11 @@ local M = {}
 local icons = require('icons')
 
 -- Detect if the current working directory is a Jujutsu repository
-local function is_jj_repo()
-  return vim.fn.isdirectory(vim.fn.getcwd() .. '/.jj') == 1
+---@return boolean
+local function is_jj()
+  local is_jj_exec = vim.fn.executable('jj') == 1
+  local is_jj_repo = vim.fn.isdirectory(vim.fn.getcwd() .. '/.jj') == 1
+  return is_jj_exec and is_jj_repo
 end
 
 ---@type nil|string
@@ -53,10 +56,10 @@ M.component = {
     return jj_status()
   end,
   icon = vim.g.have_icons and icons.misc.Bookmark or nil,
-  cond = is_jj_repo,
+  cond = is_jj,
 }
 
-M.is_jj_repo = is_jj_repo()
+M.is_jj = is_jj()
 
 return M
 

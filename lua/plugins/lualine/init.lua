@@ -51,7 +51,7 @@ vim.api.nvim_create_autocmd('UIEnter', {
       },
       sections = {
         lualine_a = { 'mode' },
-        lualine_b = { jj.is_jj_repo and jj.component or 'branch', 'diff', 'diagnostics' },
+        lualine_b = { jj.is_jj and jj.component or 'branch', 'diff', 'diagnostics' },
         lualine_c = { filename },
         lualine_x = { lsp_status, spaces, 'filetype' },
         lualine_y = { 'location' },
