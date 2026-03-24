@@ -61,6 +61,7 @@ M.misc = {
   Spaces = '󰞔',
   Octoface = '',
   VerticalBar = '│',
+  Bookmark = '󰃀',
 }
 
 return M

@@ -52,7 +52,7 @@ M.component = {
   function()
     return jj_status()
   end,
-  icon = vim.g.have_icons and icons.git.branch or nil,
+  icon = vim.g.have_icons and icons.misc.Bookmark or nil,
   cond = is_jj_repo,
 }
 
