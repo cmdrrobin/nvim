@@ -98,6 +98,18 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
+--- @param diagnostic? vim.Diagnostic
+--- @param bufnr integer
+local function on_jump(diagnostic, bufnr)
+  if not diagnostic then
+    return
+  end
+  -- FIXME(robin): opts.jump.float is deprecrated. Need to use opts.jump.on_jump instead.
+  -- Still issue when moving forward in diagnostic, it will not show the next diagnostic directly.
+  -- vim.diagnostic.open_float({ diagnostic }, bufnr)
+  vim.diagnostic.show(diagnostic.namespace, bufnr, { diagnostic }, { virtual_text = { current_line = true } })
+end
+
 -- Diagnostic Config
 -- See :help vim.diagnostic.Opts
 vim.diagnostic.config({
@@ -110,8 +122,8 @@ vim.diagnostic.config({
   virtual_text = false, -- Text shows up at the end of the line
   virtual_lines = false, -- Text shows up underneath the line, with virtual lines
 
-  -- Auto open the float, so you can easily read the errors when jumping with `[d` and `]d`
-  jump = { float = true },
+  -- Auto open the diagnostic, so you can easily read the errors when jumping with `[d` and `]d`
+  jump = { on_jump = on_jump },
 })
 
 -- Load LSP configs and capabilities when opening or creating a new file.

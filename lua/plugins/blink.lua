@@ -3,6 +3,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
   callback = function()
     vim.pack.add({
       { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') },
+      'https://github.com/rafamadriz/friendly-snippets',
     })
 
     local blink = require('blink.cmp')
@@ -134,11 +135,6 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
     vim.lsp.config('*', { capabilities = capabilities })
   end,
 })
-
--- Collect snippets later
-vim.schedule(function()
-  vim.pack.add({ 'https://github.com/rafamadriz/friendly-snippets' })
-end)
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
