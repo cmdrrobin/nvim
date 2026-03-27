@@ -38,69 +38,73 @@ for group, opts in pairs(statusline_hls) do
   vim.api.nvim_set_hl(0, group, opts)
 end
 
+--- Mode string lookup table (module-level to avoid recreation on every render)
+---@type table<string, string>
+local modes = {
+  ['n'] = 'NORMAL',
+  ['no'] = 'O-PENDING',
+  ['nov'] = 'O-PENDING',
+  ['noV'] = 'O-PENDING',
+  ['no\22'] = 'O-PENDING',
+  ['niI'] = 'NORMAL',
+  ['niR'] = 'NORMAL',
+  ['niV'] = 'NORMAL',
+  ['nt'] = 'NORMAL',
+  ['ntT'] = 'NORMAL',
+  ['v'] = 'VISUAL',
+  ['vs'] = 'VISUAL',
+  ['V'] = 'V-LINE',
+  ['Vs'] = 'V-LINE',
+  ['\22'] = 'V-BLOCK',
+  ['\22s'] = 'V-BLOCK',
+  ['s'] = 'SELECT',
+  ['S'] = 'S-LINE',
+  ['\19'] = 'S-BLOCK',
+  ['i'] = 'INSERT',
+  ['ic'] = 'INSERT',
+  ['ix'] = 'INSERT',
+  ['R'] = 'REPLACE',
+  ['Rc'] = 'REPLACE',
+  ['Rx'] = 'REPLACE',
+  ['Rv'] = 'V-REPLACE',
+  ['Rvc'] = 'V-REPLACE',
+  ['Rvx'] = 'V-REPLACE',
+  ['c'] = 'COMMAND',
+  ['cv'] = 'EX',
+  ['ce'] = 'EX',
+  ['r'] = 'REPLACE',
+  ['rm'] = 'MORE',
+  ['r?'] = 'CONFIRM',
+  ['!'] = 'SHELL',
+  ['t'] = 'TERMINAL',
+}
+
+--- Lookup table mapping mode strings to highlight group suffixes
+---@type table<string, string>
+local mode_hls = {
+  NORMAL = 'Normal',
+  ['O-PENDING'] = 'Normal',
+  VISUAL = 'Visual',
+  ['V-LINE'] = 'Visual',
+  ['V-BLOCK'] = 'Visual',
+  INSERT = 'Insert',
+  SELECT = 'Insert',
+  ['S-LINE'] = 'Insert',
+  ['S-BLOCK'] = 'Insert',
+  REPLACE = 'Replace',
+  ['V-REPLACE'] = 'Replace',
+  COMMAND = 'Command',
+  EX = 'Command',
+  TERMINAL = 'Command',
+  SHELL = 'Command',
+}
+
 --- Current mode.
 ---@return string
 function M.mode_component()
-  local modes = {
-    ['n'] = 'NORMAL',
-    ['no'] = 'O-PENDING',
-    ['nov'] = 'O-PENDING',
-    ['noV'] = 'O-PENDING',
-    ['no\22'] = 'O-PENDING',
-    ['niI'] = 'NORMAL',
-    ['niR'] = 'NORMAL',
-    ['niV'] = 'NORMAL',
-    ['nt'] = 'NORMAL',
-    ['ntT'] = 'NORMAL',
-    ['v'] = 'VISUAL',
-    ['vs'] = 'VISUAL',
-    ['V'] = 'V-LINE',
-    ['Vs'] = 'V-LINE',
-    ['\22'] = 'V-BLOCK',
-    ['\22s'] = 'V-BLOCK',
-    ['s'] = 'SELECT',
-    ['S'] = 'S-LINE',
-    ['\19'] = 'S-BLOCK',
-    ['i'] = 'INSERT',
-    ['ic'] = 'INSERT',
-    ['ix'] = 'INSERT',
-    ['R'] = 'REPLACE',
-    ['Rc'] = 'REPLACE',
-    ['Rx'] = 'REPLACE',
-    ['Rv'] = 'V-REPLACE',
-    ['Rvc'] = 'V-REPLACE',
-    ['Rvx'] = 'V-REPLACE',
-    ['c'] = 'COMMAND',
-    ['cv'] = 'EX',
-    ['ce'] = 'EX',
-    ['r'] = 'REPLACE',
-    ['rm'] = 'MORE',
-    ['r?'] = 'CONFIRM',
-    ['!'] = 'SHELL',
-    ['t'] = 'TERMINAL',
-  }
-
-  -- Get the respective string to display.
   local mode = modes[vim.api.nvim_get_mode().mode] or 'UNKNOWN'
-
-  -- Set the highlight group.
-  local hl = 'Other'
-  if mode:find('NORMAL') then
-    hl = 'Normal'
-  elseif mode:find('PENDING') then
-    hl = 'Pending'
-  elseif mode:find('VISUAL') or mode:find('V-LINE') or mode:find('V-BLOCK') then
-    hl = 'Visual'
-  elseif mode:find('INSERT') or mode:find('SELECT') then
-    hl = 'Insert'
-  elseif mode:find('COMMAND') or mode:find('TERMINAL') or mode:find('EX') then
-    hl = 'Command'
-  end
-
-  -- Construct the bubble-like component.
-  return table.concat({
-    string.format('%%#StatuslineMode%s# %s %%#Statusline#', hl, mode),
-  })
+  local hl = mode_hls[mode] or 'Other'
+  return string.format('%%#StatuslineMode%s# %s %%#Statusline#', hl, mode)
 end
 
 ---@return string
@@ -111,30 +115,11 @@ function M.git_component()
     return ''
   end
 
-  local added = git_info.added and ('%#GitSignsAdd#+' .. git_info.added .. ' ') or ''
-  local changed = git_info.changed and ('%#GitSignsChange#~' .. git_info.changed .. ' ') or ''
-  local removed = git_info.removed and ('%#GitSignsDelete#-' .. git_info.removed .. ' ') or ''
+  local added = (git_info.added and git_info.added ~= 0) and ('%#GitSignsAdd#+' .. git_info.added .. ' ') or ''
+  local changed = (git_info.changed and git_info.changed ~= 0) and ('%#GitSignsChange#~' .. git_info.changed .. ' ') or ''
+  local removed = (git_info.removed and git_info.removed ~= 0) and ('%#GitSignsDelete#-' .. git_info.removed .. ' ') or ''
 
-  if git_info.added == 0 then
-    added = ''
-  end
-  if git_info.changed == 0 then
-    changed = ''
-  end
-  if git_info.removed == 0 then
-    removed = ''
-  end
-
-  return table.concat({
-    '%#GitSignsAdd# ',
-    git_info.head,
-    ' %#Normal#',
-    ' ',
-    added,
-    changed,
-    removed,
-    '%#Statusline#',
-  })
+  return '%#GitSignsAdd# ' .. git_info.head .. ' %#Normal# ' .. added .. changed .. removed .. '%#Statusline#'
 end
 
 ---@type table<string, string?>
@@ -189,17 +174,19 @@ vim.api.nvim_create_autocmd('LspProgress', {
       -- Wait a bit before clearing the status.
       vim.defer_fn(function()
         vim.cmd.redrawstatus()
-      end, 3000)
+      end, 1000)
     else
       processing = true
       -- Start timer to update statusline every 100ms
-      spinner_timer = vim.uv.new_timer()
-      if spinner_timer then
-        spinner_timer:start(0, 100, function()
-          vim.schedule(function()
-            vim.cmd.redrawstatus()
+      if not spinner_timer then
+        spinner_timer = vim.uv.new_timer()
+        if spinner_timer then
+          spinner_timer:start(0, 100, function()
+            vim.schedule(function()
+              vim.cmd.redrawstatus()
+            end)
           end)
-        end)
+        end
       end
     end
   end,
@@ -219,21 +206,20 @@ function M.lsp_progress_component()
 
   if processing then
     spinner_index = (spinner_index % #spinner_symbols) + 1
-    return table.concat({ '%#StatuslineSpinner#' .. spinner_symbols[spinner_index] .. '%#StatuslineTtitle# ' .. progress_status.client })
+    return '%#StatuslineSpinner#' .. spinner_symbols[spinner_index] .. '%#StatuslineTitle# ' .. progress_status.client
   end
-  return table.concat({
-    string.format('%%#StatuslineTitle#%s  ', progress_status.client),
-  })
+  return string.format('%%#StatuslineTitle#%s  ', progress_status.client)
 end
 
 function M.diagnostics_component()
   return vim.diagnostic.status()
 end
+
 --- File-content encoding for the current buffer.
 ---@return string
 function M.encoding_component()
   local encoding = vim.opt.fileencoding:get()
-  return encoding ~= '' and string.format('%%#StatuslineModeSeparatorOther# %s', encoding) or ''
+  return encoding ~= '' and string.format('%%#StatuslineModeSeparatorOther# %s', encoding) or ''
 end
 
 --- The current line, total line count, and column position.
@@ -243,37 +229,35 @@ function M.position_component()
   local line_count = vim.api.nvim_buf_line_count(0)
   local col = vim.fn.virtcol('.')
 
-  return table.concat({
-    '%#StatuslineItalic#l: ',
-    string.format('%%#StatuslineTitle#%3d', line),
-    string.format('%%#StatuslineItalic#/%d c: %3d %%P ', line_count, col),
-  })
+  return string.format('%%#StatuslineItalic#l: %%#StatuslineTitle#%3d%%#StatuslineItalic#/%d c: %3d %%P ', line, line_count, col)
 end
 
--- show number of spaces that is used for current buffer with additional icon
+--- Number of spaces used for indentation in the current buffer.
+---@return string
 function M.spaces_component()
+  local sw = vim.bo.shiftwidth
   if not vim.g.have_icons then
-    return vim.api.nvim_get_option_value('shiftwidth', { buf = 0 })
-  else
-    return icons.misc.Spaces .. ' ' .. vim.api.nvim_get_option_value('shiftwidth', { buf = 0 })
+    return tostring(sw)
   end
+  return icons.misc.Spaces .. ' ' .. sw
 end
 
 function M.filetype_component()
   return string.format(' %s ', vim.bo.filetype):upper()
 end
 
+--- Joins non-empty components with two spaces.
+---@param components string[]
+---@return string
+local function concat_components(components)
+  return vim.iter(components):skip(1):fold(components[1], function(acc, component)
+    return #component > 0 and string.format('%s  %s', acc, component) or acc
+  end)
+end
+
 --- Renders the statusline.
 ---@return string
 function M.render()
-  ---@param components string[]
-  ---@return string
-  local function concat_components(components)
-    return vim.iter(components):skip(1):fold(components[1], function(acc, component)
-      return #component > 0 and string.format('%s  %s', acc, component) or acc
-    end)
-  end
-
   return table.concat({
     concat_components({
       M.mode_component(),
