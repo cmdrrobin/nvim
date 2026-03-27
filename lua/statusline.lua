@@ -29,9 +29,9 @@ for mode, hl in pairs({
   statusline_hls['StatuslineMode' .. mode] = hl
 end
 statusline_hls = vim.tbl_extend('error', statusline_hls, {
-  StatuslineItalic = { fg = p.muted, bg = p.base, italic = true },
-  StatuslineSpinner = { fg = p.foam, bg = p.base, bold = true },
-  StatuslineTitle = { fg = p.muted, bg = p.base, bold = true },
+  StatuslineItalic = { fg = p.muted, bg = p.surface, italic = true },
+  StatuslineSpinner = { fg = p.foam, bg = p.surface, bold = true },
+  StatuslineTitle = { fg = p.muted, bg = p.surface, bold = true },
 })
 
 for group, opts in pairs(statusline_hls) do
@@ -144,6 +144,23 @@ local progress_status = {
   title = nil,
 }
 
+local processing = false
+local spinner_index = 1
+local spinner_timer = nil
+
+local spinner_symbols = {
+  '⠋',
+  '⠙',
+  '⠹',
+  '⠸',
+  '⠼',
+  '⠴',
+  '⠦',
+  '⠧',
+  '⠇',
+  '⠏',
+}
+
 vim.api.nvim_create_autocmd('LspProgress', {
   group = vim.api.nvim_create_augroup('cmdrrobin/statusline', { clear = true }),
   desc = 'Update LSP progress in statusline',
@@ -162,12 +179,28 @@ vim.api.nvim_create_autocmd('LspProgress', {
 
     if progress_status.kind == 'end' then
       progress_status.title = nil
+      processing = false
+      -- Stop timer
+      if spinner_timer then
+        spinner_timer:stop()
+        spinner_timer:close()
+        spinner_timer = nil
+      end
       -- Wait a bit before clearing the status.
       vim.defer_fn(function()
         vim.cmd.redrawstatus()
       end, 3000)
     else
-      vim.cmd.redrawstatus()
+      processing = true
+      -- Start timer to update statusline every 100ms
+      spinner_timer = vim.uv.new_timer()
+      if spinner_timer then
+        spinner_timer:start(0, 100, function()
+          vim.schedule(function()
+            vim.cmd.redrawstatus()
+          end)
+        end)
+      end
     end
   end,
 })
@@ -184,8 +217,11 @@ function M.lsp_progress_component()
     return ''
   end
 
+  if processing then
+    spinner_index = (spinner_index % #spinner_symbols) + 1
+    return table.concat({ '%#StatuslineSpinner#' .. spinner_symbols[spinner_index] .. '%#StatuslineTtitle# ' .. progress_status.client })
+  end
   return table.concat({
-    '%#StatuslineSpinner#󱥸 ',
     string.format('%%#StatuslineTitle#%s  ', progress_status.client),
   })
 end
