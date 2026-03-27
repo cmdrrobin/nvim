@@ -1,6 +1,7 @@
 vim.pack.add({
   { src = 'https://github.com/rose-pine/neovim', name = 'rose-pine' },
 }, { confirm = false })
+
 ---@module 'rose-pine'
 ---@type Options
 require('rose-pine').setup({

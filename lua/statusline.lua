@@ -171,7 +171,7 @@ function M.git_component()
   local removed = (git_info.removed and git_info.removed ~= 0) and (' %#GitSignsDelete#-' .. git_info.removed) or ''
 
   local branch = M.is_jj() and M.jj_component() or git_info.head
-  return '%#StatuslineInfo#' .. branch .. '%#Normal# ' .. added .. changed .. removed .. '%#Statusline#'
+  return '%#StatuslineInfo#' .. branch .. '%#Statusline# ' .. added .. changed .. removed .. '%#Statusline#'
 end
 
 ---@type table<string, string?>
