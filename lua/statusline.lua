@@ -281,7 +281,16 @@ function M.position_component()
   local line_count = vim.api.nvim_buf_line_count(0)
   local col = vim.fn.virtcol('.')
 
-  return string.format('%%#StatuslineItalic#l: %%#StatuslineTitle#%3d%%#StatuslineItalic#/%d c: %3d %%P ', line, line_count, col)
+  -- Get mode highlight
+  local mode = modes[vim.api.nvim_get_mode().mode] or 'UNKNOWN'
+  local hl_suffix = mode_hls[mode] or 'Other'
+  local mode_hl = 'StatuslineMode' .. hl_suffix
+
+  local lines_output = string.format('%%#StatuslineItalic#l: %%#StatuslineTitle#%3d%%#StatuslineItalic#/%d', line, line_count)
+  local col_output = string.format('c: %3d', col)
+  local post_output = string.format('%%#%s# %%P ', mode_hl)
+
+  return lines_output .. ' ' .. col_output .. ' ' .. post_output
 end
 
 --- Number of spaces used for indentation in the current buffer.
