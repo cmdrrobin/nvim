@@ -32,6 +32,7 @@ statusline_hls = vim.tbl_extend('error', statusline_hls, {
   StatuslineItalic = { fg = p.muted, bg = p.surface, italic = true },
   StatuslineSpinner = { fg = p.foam, bg = p.surface, bold = true },
   StatuslineTitle = { fg = p.muted, bg = p.surface, bold = true },
+  StatuslineInfo = { fg = p.iris, bg = p.surface },
 })
 
 for group, opts in pairs(statusline_hls) do
@@ -107,6 +108,56 @@ function M.mode_component()
   return string.format('%%#StatuslineMode%s# %s %%#Statusline#', hl, mode)
 end
 
+-- Detect if the current working directory is a Jujutsu repository
+---@return boolean
+function M.is_jj()
+  local is_jj_exec = vim.fn.executable('jj') == 1
+  local is_jj_repo = vim.fn.isdirectory(vim.fn.getcwd() .. '/.jj') == 1
+  return is_jj_exec and is_jj_repo
+end
+
+---@type nil|string
+local _cache = nil -- last computed status string
+---@type boolean
+local _dirty = true -- true = needs a refresh on next render
+
+-- Invalidate whenever the user writes a buffer or enters a new buffer
+-- (switching projects may change the jj context entirely).
+vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter' }, {
+  group = vim.api.nvim_create_augroup('jj_status_cache', { clear = true }),
+  callback = function()
+    _dirty = true
+  end,
+})
+
+-- Get the closest bookmark reachable from @-, or fall back to the short change ID of @
+---@return nil|string
+function M.jj_status()
+  if not _dirty and _cache ~= nil then
+    return _cache
+  end
+
+  -- `closest_bookmark(@-)` finds the nearest ancestor commit that has a bookmark.
+  -- The `bookmarks` template outputs names directly, e.g. "main*" (* = has local changes).
+  local name = vim.fn.system('jj log -r "closest_bookmark(@-)" --no-pager --no-graph --ignore-working-copy -T "bookmarks" 2>/dev/null')
+  name = name:gsub('%*', ''):gsub('%s+', '')
+  if name ~= '' then
+    _cache = name
+    _dirty = false
+    return _cache
+  end
+
+  -- No bookmark found: show the short change ID of the working-copy commit
+  local id = vim.fn.system('jj log -r @ --no-graph -T "change_id.short()" --no-pager --ignore-working-copy 2>/dev/null')
+  _cache = id:gsub('%s+', '')
+  _dirty = false
+  return _cache
+end
+
+function M.jj_component()
+  return icons.misc.Bookmark .. ' ' .. M.jj_status()
+end
+
 ---@return string
 function M.git_component()
   local git_info = vim.b.gitsigns_status_dict
@@ -119,7 +170,8 @@ function M.git_component()
   local changed = (git_info.changed and git_info.changed ~= 0) and ('%#GitSignsChange#~' .. git_info.changed .. ' ') or ''
   local removed = (git_info.removed and git_info.removed ~= 0) and ('%#GitSignsDelete#-' .. git_info.removed .. ' ') or ''
 
-  return '%#GitSignsAdd# ' .. git_info.head .. ' %#Normal# ' .. added .. changed .. removed .. '%#Statusline#'
+  local branch = M.is_jj() and M.jj_component() or git_info.head
+  return '%#StatuslineInfo#' .. branch .. '%#Normal# ' .. added .. changed .. removed .. '%#Statusline#'
 end
 
 ---@type table<string, string?>
