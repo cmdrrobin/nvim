@@ -258,7 +258,7 @@ function M.lsp_progress_component()
 
   if processing then
     spinner_index = (spinner_index % #spinner_symbols) + 1
-    return '%#StatuslineSpinner#' .. spinner_symbols[spinner_index] .. '%#StatuslineTitle# ' .. progress_status.client
+    return '%#StatuslineSpinner#' .. spinner_symbols[spinner_index] .. '%#StatuslineTitle# ' .. progress_status.client .. '%#Statusline#'
   end
   return string.format('%%#StatuslineTitle#%s  ', progress_status.client)
 end
@@ -294,8 +294,32 @@ function M.spaces_component()
   return icons.misc.Spaces .. ' ' .. sw
 end
 
+function M.apply_icon()
+  local icon, hl_group
+  local ok, devicons = pcall(require, 'nvim-web-devicons')
+
+  if ok then
+    icon, hl_group = devicons.get_icon(vim.fn.expand('%:t'))
+    if not icon then
+      icon, hl_group = devicons.get_icon_by_filetype(vim.bo.filetype)
+    end
+  end
+
+  -- Default fallback
+  if not icon then
+    icon = ' '
+    hl_group = 'DevIconDefault'
+  end
+
+  -- Return with highlight group applied
+  if hl_group then
+    return string.format('%%#%s#%s %%#Statusline#', hl_group, icon)
+  end
+  return icon .. ' '
+end
+
 function M.filetype_component()
-  return string.format(' %s ', vim.bo.filetype):upper()
+  return M.apply_icon() .. vim.bo.filetype
 end
 
 --- Joins non-empty components with two spaces.
