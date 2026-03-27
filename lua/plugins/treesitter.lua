@@ -42,5 +42,5 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 -- ensure basic parser are installed
-local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'terraform' }
+local parsers = { 'bash', 'c', 'diff', 'go', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'vim', 'vimdoc', 'terraform' }
 TS.install(parsers)
