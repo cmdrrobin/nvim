@@ -1,5 +1,11 @@
 local M = {}
 
+-- Use default statusline when rose-pine is not available
+local palette_ok, p = pcall(require, 'rose-pine.palette')
+if not palette_ok then
+  return
+end
+
 local icons = require('icons')
 
 -- Don't show the command that produced the quickfix list.
@@ -8,11 +14,10 @@ vim.g.qf_disable_statusline = 1
 -- Show the mode in my custom component instead.
 vim.o.showmode = false
 
---- Keeps track of the highlight groups I've already created.
+--- Keeps track of the highlight groups
 ---@type table<string, table>
 local statusline_hls = {}
 
-local p = require('rose-pine.palette')
 for mode, hl in pairs({
   Normal = { bg = p.rose, fg = p.base, bold = true },
   Insert = { bg = p.foam, fg = p.base, bold = true },
@@ -182,10 +187,12 @@ function M.lsp_progress_component()
   return table.concat({
     '%#StatuslineSpinner#󱥸 ',
     string.format('%%#StatuslineTitle#%s  ', progress_status.client),
-    string.format('%%#StatuslineItalic#%s...', progress_status.title),
   })
 end
 
+function M.diagnostics_component()
+  return vim.diagnostic.status()
+end
 --- File-content encoding for the current buffer.
 ---@return string
 function M.encoding_component()
@@ -202,13 +209,13 @@ function M.position_component()
 
   return table.concat({
     '%#StatuslineItalic#l: ',
-    string.format('%%#StatuslineTitle#%d', line),
-    string.format('%%#StatuslineItalic#/%d c: %d %%P ', line_count, col),
+    string.format('%%#StatuslineTitle#%3d', line),
+    string.format('%%#StatuslineItalic#/%d c: %3d %%P ', line_count, col),
   })
 end
 
 -- show number of spaces that is used for current buffer with additional icon
-function M.spaces()
+function M.spaces_component()
   if not vim.g.have_icons then
     return vim.api.nvim_get_option_value('shiftwidth', { buf = 0 })
   else
@@ -216,7 +223,7 @@ function M.spaces()
   end
 end
 
-local function filetype()
+function M.filetype_component()
   return string.format(' %s ', vim.bo.filetype):upper()
 end
 
@@ -235,14 +242,14 @@ function M.render()
     concat_components({
       M.mode_component(),
       M.git_component(),
-      vim.diagnostic.status(),
+      M.diagnostics_component(),
       '%< %f',
     }),
     '%#StatusLine#%=',
     concat_components({
       M.lsp_progress_component(),
-      M.spaces(),
-      filetype(),
+      M.spaces_component(),
+      M.filetype_component(),
       M.position_component(),
     }),
   })
