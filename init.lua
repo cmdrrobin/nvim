@@ -23,6 +23,7 @@ require('plugins.treesitter')
 require('plugins.treesitter-context')
 require('plugins.snacks')
 require('plugins.oil')
+require('statusline')
 
 --[[ LSP ]]
 require('lsp')
@@ -38,7 +39,6 @@ require('plugins.schemastore')
 require('plugins.venv-selector')
 
 --[[ Other ]]
-require('plugins.lualine')
 require('plugins.vim-sleuth')
 require('plugins.nvim-autopairs')
 require('plugins.mini-align')

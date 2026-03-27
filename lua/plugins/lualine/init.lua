@@ -1,9 +1,8 @@
 -- Load Codecompanion extension locally
+vim.pack.add({ 'https://github.com/nvim-lualine/lualine.nvim' })
 vim.api.nvim_create_autocmd('UIEnter', {
   once = true,
   callback = function()
-    vim.pack.add({ 'https://github.com/nvim-lualine/lualine.nvim' })
-
     vim.g.lualine_laststatus = vim.o.laststatus
     if vim.fn.argc(-1) > 0 then
       -- set an empty statusline till lualine loads
