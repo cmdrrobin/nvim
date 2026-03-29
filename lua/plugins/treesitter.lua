@@ -4,18 +4,13 @@ vim.pack.add({
 
 local TS = require('nvim-treesitter')
 
----@param buf integer
----@param language string
-local function treesitter_try_attach(buf, language)
-  -- check if parser exists and load it
-  if not vim.treesitter.language.add(language) then
-    return
-  end
-  -- enables syntax highlighting and other treesitter features
-  vim.treesitter.start(buf, language)
-end
+-- Configure native auto-install
+require('nvim-treesitter').setup({
+  auto_install = true,
+  highlight = { enable = true },
+})
 
-local available_parsers = TS.get_available()
+-- Custom autocmd just for attachment (installation handled natively)
 vim.api.nvim_create_autocmd('FileType', {
   callback = function(args)
     local buf, filetype = args.buf, args.match
@@ -24,23 +19,18 @@ vim.api.nvim_create_autocmd('FileType', {
       return
     end
 
+    -- Check fresh each time (not cached at load time)
     local installed_parsers = TS.get_installed('parsers')
 
     if vim.tbl_contains(installed_parsers, language) then
-      -- enable the parser if it is installed
-      treesitter_try_attach(buf, language)
-    elseif vim.tbl_contains(available_parsers, language) then
-      -- if a parser is available in `nvim-treesitter` enable it after ensuring it is installed
-      TS.install(language):await(function()
-        treesitter_try_attach(buf, language)
-      end)
-    else
-      -- try to enable treesitter features in case the parser exists but is not available from `nvim-treesitter`
-      treesitter_try_attach(buf, language)
+      -- Parser is installed, enable treesitter
+      if vim.treesitter.language.add(language) then
+        vim.treesitter.start(buf, language)
+      end
     end
+    -- Native auto_install will handle installation if not installed
   end,
 })
 
--- ensure basic parser are installed
-local parsers = { 'bash', 'c', 'diff', 'go', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'vim', 'vimdoc', 'terraform' }
-TS.install(parsers)
+-- Initial basic parsers with proper async handling
+TS.install({ 'bash', 'c', 'diff', 'go', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'vim', 'vimdoc', 'terraform' }):await()
