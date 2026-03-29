@@ -1,38 +1,50 @@
 local M = {}
 
--- Use default statusline when rose-pine is not available
-local palette_ok, p = pcall(require, 'rose-pine.palette')
-if not palette_ok then
-  return
-end
-
 local icons = require('icons')
 
 -- Don't show the command that produced the quickfix list.
 vim.g.qf_disable_statusline = 1
 
--- Show the mode in my custom component instead.
-vim.o.showmode = false
-
+-- colors from rose-pine palette
+-- https://rosepinetheme.com/palette/
+local colors = {
+  base = '#191724',
+  surface = '#1f1d2e',
+  overlay = '#26233a',
+  muted = '#6e6a86',
+  subtle = '#908caa',
+  text = '#e0def4',
+  love = '#eb6f92',
+  gold = '#f6c177',
+  rose = '#ebbcba',
+  pine = '#31748f',
+  foam = '#9ccfd8',
+  iris = '#c4a7e7',
+  leaf = '#95b1ac',
+  highlight_low = '#21202e',
+  highlight_med = '#403d52',
+  highlight_high = '#524f67',
+  none = 'NONE',
+}
 --- Keeps track of the highlight groups
 ---@type table<string, table>
 local statusline_hls = {}
 
 for mode, hl in pairs({
-  Normal = { bg = p.rose, fg = p.base, bold = true },
-  Insert = { bg = p.foam, fg = p.base, bold = true },
-  Visual = { bg = p.iris, fg = p.base, bold = true },
-  Replace = { bg = p.pine, fg = p.base, bold = true },
-  Command = { bg = p.love, fg = p.base, bold = true },
-  Inactive = { bg = p.surface, fg = p.muted, bold = true },
+  Normal = { bg = colors.rose, fg = colors.base, bold = true },
+  Insert = { bg = colors.foam, fg = colors.base, bold = true },
+  Visual = { bg = colors.iris, fg = colors.base, bold = true },
+  Replace = { bg = colors.pine, fg = colors.base, bold = true },
+  Command = { bg = colors.love, fg = colors.base, bold = true },
+  Inactive = { bg = colors.surface, fg = colors.base, bold = true },
 }) do
   statusline_hls['StatuslineMode' .. mode] = hl
 end
 statusline_hls = vim.tbl_extend('error', statusline_hls, {
-  StatuslineItalic = { fg = p.muted, bg = p.surface, italic = true },
-  StatuslineSpinner = { fg = p.foam, bg = p.surface, bold = true },
-  StatuslineTitle = { fg = p.muted, bg = p.surface, bold = true },
-  StatuslineInfo = { fg = p.iris, bg = p.surface },
+  StatuslineItalic = { fg = colors.muted, bg = colors.surface, italic = true },
+  StatuslineSpinner = { fg = colors.foam, bg = colors.surface, bold = true },
+  StatuslineTitle = { fg = colors.subtle, bg = colors.surface, bold = true },
+  StatuslineInfo = { fg = colors.iris, bg = colors.surface },
 })
 
 for group, opts in pairs(statusline_hls) do
