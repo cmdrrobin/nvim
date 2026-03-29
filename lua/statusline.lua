@@ -177,12 +177,13 @@ function M.git_component()
   if not git_info or git_info.head == '' then
     return ''
   end
+  local git_head = icons.git.branch .. ' ' .. git_info.head
 
   local added = (git_info.added and git_info.added ~= 0) and ('%#GitSignsAdd#+' .. git_info.added) or ''
   local changed = (git_info.changed and git_info.changed ~= 0) and (' %#GitSignsChange#~' .. git_info.changed) or ''
   local removed = (git_info.removed and git_info.removed ~= 0) and (' %#GitSignsDelete#-' .. git_info.removed) or ''
 
-  local branch = M.is_jj() and M.jj_component() or git_info.head
+  local branch = M.is_jj() and M.jj_component() or git_head
   return '%#StatuslineInfo#' .. branch .. '%#Statusline# ' .. added .. changed .. removed .. '%#Statusline#'
 end
 
@@ -343,6 +344,10 @@ function M.filetype_component()
   return M.apply_icon() .. vim.bo.filetype
 end
 
+function M.filename_component()
+  return '%<%f%m%r'
+end
+
 --- Joins non-empty components with two spaces.
 ---@param components string[]
 ---@return string
@@ -360,7 +365,7 @@ function M.render()
       M.mode_component(),
       M.git_component(),
       M.diagnostics_component(),
-      '%< %f',
+      M.filename_component(),
     }),
     '%#StatusLine#%=',
     concat_components({
