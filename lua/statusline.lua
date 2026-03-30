@@ -367,7 +367,7 @@ function M.render()
       M.diagnostics_component(),
       M.filename_component(),
     }),
-    '%#StatusLine#%=',
+    '%=', -- align to right
     concat_components({
       M.lsp_progress_component(),
       M.spaces_component(),
