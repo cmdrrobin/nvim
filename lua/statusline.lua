@@ -320,15 +320,16 @@ function M.spaces_component()
   return icons.misc.Spaces .. ' ' .. sw
 end
 
+---@param filetype string
 ---@return string
-function M.apply_icon()
+function M.apply_icon(filetype)
   local icon, hl_group
-  local ok, devicons = pcall(require, 'nvim-web-devicons')
+  local _devicons_ok, _devicons = pcall(require, 'nvim-web-devicons')
 
-  if ok then
-    icon, hl_group = devicons.get_icon(vim.fn.expand('%:t'))
+  if _devicons_ok then
+    icon, hl_group = _devicons.get_icon(vim.fn.expand('%:t'))
     if not icon then
-      icon, hl_group = devicons.get_icon_by_filetype(vim.bo.filetype)
+      icon, hl_group = _devicons.get_icon_by_filetype(filetype)
     end
   end
 
@@ -338,18 +339,19 @@ function M.apply_icon()
     hl_group = 'DevIconDefault'
   end
 
-  -- Return with highlight group applied
-  if hl_group then
-    return string.format('%%#%s#%s %%#Statusline#', hl_group, icon)
+  return string.format('%%#%s#%s %%#Statusline#', hl_group, icon)
+end
+
+---@return string|nil
+function M.filetype_component()
+  local ft = vim.bo.filetype
+  if ft == '' then -- return nothing when filetype is unknown
+    return nil
   end
-  return icon .. ' '
+  return M.apply_icon(ft) .. ft
 end
 
 ---@return string
-function M.filetype_component()
-  return M.apply_icon() .. vim.bo.filetype
-end
-
 function M.filename_component()
   return '%<%f%m%r'
 end
