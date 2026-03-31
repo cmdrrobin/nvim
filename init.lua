@@ -21,7 +21,6 @@ require('statusline')
 -- [[ Plugins ]]
 require('plugins.colorscheme')
 require('plugins.treesitter')
-require('plugins.treesitter-context')
 require('plugins.snacks')
 require('plugins.oil')
 

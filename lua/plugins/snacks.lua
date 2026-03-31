@@ -1,8 +1,10 @@
 vim.pack.add({ 'https://github.com/folke/snacks.nvim' }, { confirm = false })
 
+local Snacks = require('snacks')
+
 ---@module 'snacks'
 ---@type snacks.Config
-require('snacks').setup({
+Snacks.setup({
   -- your configuration comes here
   -- or leave it empty to use the default settings
   -- refer to the configuration section below
