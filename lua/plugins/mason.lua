@@ -1,14 +1,28 @@
 -- List of formatters and/or linters that need to be installed
 ---@type table<string>
 local ensure_installed = {
-  'stylua',
-  'shfmt',
-  'goimports',
-  'gofumpt',
-  'hadolint',
-  'markdownlint-cli2',
+  'ansible-language-server',
   'ansible-lint',
+  'bash-language-server',
+  'docker-compose-language-service',
+  'dockerfile-language-server',
+  'gofumpt',
+  'goimports',
+  'gopls',
+  'hadolint',
+  'json-lsp',
+  'lua-language-server',
+  'markdownlint-cli2',
   'prettier',
+  'ruff',
+  'shfmt',
+  'stylua',
+  'stylua',
+  'taplo',
+  'terraform-ls',
+  'ty',
+  'typescript-language-server',
+  'yaml-language-server',
 }
 
 vim.pack.add({
