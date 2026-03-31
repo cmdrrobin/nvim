@@ -106,9 +106,6 @@ vim.opt.wildignore:append({ '.DS_Store' })
 
 -- Custom settings
 
--- Enable format on save
-vim.g.format_on_save = true
-
 -- Set to true if you want to show icons
 vim.g.have_icons = true
 
