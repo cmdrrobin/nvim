@@ -7,6 +7,7 @@ vim.g.qf_disable_statusline = 1
 
 -- colors from rose-pine palette
 -- https://rosepinetheme.com/palette/
+---@type table<string, string>
 local colors = {
   base = '#191724',
   surface = '#1f1d2e',
@@ -166,6 +167,7 @@ function M.jj_status()
   return _cache
 end
 
+---@return string
 function M.jj_component()
   return icons.misc.Bookmark .. ' ' .. M.jj_status()
 end
@@ -198,6 +200,7 @@ local processing = false
 local spinner_index = 1
 local spinner_timer = nil
 
+---@type table<string>
 local spinner_symbols = {
   '⠋',
   '⠙',
@@ -276,6 +279,7 @@ function M.lsp_progress_component()
   return string.format('%%#StatuslineTitle#%s  ', progress_status.client)
 end
 
+---@return string
 function M.diagnostics_component()
   return vim.diagnostic.status()
 end
@@ -316,6 +320,7 @@ function M.spaces_component()
   return icons.misc.Spaces .. ' ' .. sw
 end
 
+---@return string
 function M.apply_icon()
   local icon, hl_group
   local ok, devicons = pcall(require, 'nvim-web-devicons')
@@ -340,6 +345,7 @@ function M.apply_icon()
   return icon .. ' '
 end
 
+---@return string
 function M.filetype_component()
   return M.apply_icon() .. vim.bo.filetype
 end
