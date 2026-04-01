@@ -17,29 +17,34 @@ local disable_filetypes = { c = true, cpp = true }
 
 vim.pack.add({ 'https://github.com/stevearc/conform.nvim' })
 
----@module 'conform.types'
----@type conform.setupOpts
-require('conform').setup({
-  notify_on_error = false,
-  format_on_save = function(bufnr)
-    local lsp_format_opt
-    -- Do not format on save when disable_autoformat is set globally or for buffer
-    if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-      return
-    end
+vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
+  once = true,
+  callback = function()
+    ---@module 'conform.types'
+    ---@type conform.setupOpts
+    require('conform').setup({
+      notify_on_error = false,
+      format_on_save = function(bufnr)
+        local lsp_format_opt
+        -- Do not format on save when disable_autoformat is set globally or for buffer
+        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+          return
+        end
 
-    if disable_filetypes[vim.bo[bufnr].filetype] then
-      lsp_format_opt = 'never'
-    else
-      lsp_format_opt = 'fallback'
-    end
+        if disable_filetypes[vim.bo[bufnr].filetype] then
+          lsp_format_opt = 'never'
+        else
+          lsp_format_opt = 'fallback'
+        end
 
-    return {
-      timeout_ms = 2000,
-      lsp_format = lsp_format_opt,
-    }
+        return {
+          timeout_ms = 2000,
+          lsp_format = lsp_format_opt,
+        }
+      end,
+      formatters_by_ft = formatters_by_ft,
+    })
   end,
-  formatters_by_ft = formatters_by_ft,
 })
 
 vim.api.nvim_create_user_command('ToggleFormat', function(opts)

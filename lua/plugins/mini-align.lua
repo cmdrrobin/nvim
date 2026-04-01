@@ -1,10 +1,11 @@
 -- Align text interactively
+vim.pack.add({
+  { src = 'https://github.com/nvim-mini/mini.align', version = vim.version.range('*') },
+})
+
 vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
   once = true,
   callback = function()
-    vim.pack.add({
-      { src = 'https://github.com/nvim-mini/mini.align', version = vim.version.range('*') },
-    })
     require('mini.align').setup()
   end,
 })

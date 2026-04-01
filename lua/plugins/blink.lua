@@ -1,11 +1,14 @@
-vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
+vim.pack.add({
+  { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') },
+})
+
+vim.schedule(function()
+  vim.pack.add({ 'https://github.com/rafamadriz/friendly-snippets' })
+end)
+
+vim.api.nvim_create_autocmd('InsertEnter', {
   once = true,
   callback = function()
-    vim.pack.add({
-      { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') },
-      'https://github.com/rafamadriz/friendly-snippets',
-    })
-
     local blink = require('blink.cmp')
     blink.setup({
       -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)

@@ -4,11 +4,11 @@ local linters_by_ft = {
   ansible = { 'ansible_lint' },
 }
 
+vim.pack.add({ 'https://github.com/mfussenegger/nvim-lint' })
+
 vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
   once = true,
   callback = function()
-    vim.pack.add({ 'https://github.com/mfussenegger/nvim-lint' })
-
     local lint = require('lint')
 
     lint.linters_by_ft = linters_by_ft

@@ -1,8 +1,8 @@
+vim.pack.add({ 'https://github.com/lewis6991/gitsigns.nvim' })
+
 vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
   once = true,
   callback = function()
-    vim.pack.add({ 'https://github.com/lewis6991/gitsigns.nvim' })
-
     ---@module 'gitsigns.config'
     ---@type Gitsigns.Config
     ---@diagnostic disable: missing-fields
