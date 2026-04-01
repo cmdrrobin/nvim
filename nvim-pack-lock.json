@@ -98,10 +98,6 @@
       "rev": "123a9fb12e7229342f807ec9e6de478b1102b041",
       "src": "https://github.com/folke/ts-comments.nvim"
     },
-    "undotree": {
-      "rev": "6fa6b57cda8459e1e4b2ca34df702f55242f4e4d",
-      "src": "https://github.com/mbbill/undotree"
-    },
     "venv-selector.nvim": {
       "rev": "42e8faadf9b819654f29eb1a785797a3a328f301",
       "src": "https://github.com/linux-cultist/venv-selector.nvim"
