@@ -133,6 +133,8 @@ end
 local _cache = nil -- last computed status string
 ---@type boolean
 local _dirty = true -- true = needs a refresh on next render
+---@type boolean
+local _fetching = false -- true = async fetch already in-flight
 
 -- Invalidate whenever the user writes a buffer or enters a new buffer
 -- (switching projects may change the jj context entirely).
@@ -143,28 +145,57 @@ vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter' }, {
   end,
 })
 
--- Get the closest bookmark reachable from @-, or fall back to the short change ID of @
----@return nil|string
+-- Get the closest bookmark reachable from @-, or fall back to the short change ID of @.
+-- Returns the cached value immediately and refreshes asynchronously when stale.
+---@return string
 function M.jj_status()
-  if not _dirty and _cache ~= nil then
-    return _cache
+  if not _dirty then
+    return _cache or ''
   end
 
-  -- `closest_bookmark(@-)` finds the nearest ancestor commit that has a bookmark.
-  -- The `bookmarks` template outputs names directly, e.g. "main*" (* = has local changes).
-  local name = vim.fn.system('jj log -r "closest_bookmark(@-)" --no-pager --no-graph --ignore-working-copy -T "bookmarks" 2>/dev/null')
-  name = name:gsub('%*', ''):gsub('%s+', '')
-  if name ~= '' then
-    _cache = name
-    _dirty = false
-    return _cache
+  if not _fetching then
+    _fetching = true
+    -- `closest_bookmark(@-)` finds the nearest ancestor commit that has a bookmark.
+    -- The `bookmarks` template outputs names directly, e.g. "main*" (* = has local changes).
+    vim.system(
+      { 'jj', 'log', '-r', 'closest_bookmark(@-)', '--no-pager', '--no-graph', '--ignore-working-copy', '-T', 'bookmarks' },
+      { text = true },
+      vim.schedule_wrap(function(result)
+        -- Always reset fetching flag, even on failure
+        _fetching = false
+
+        -- Only process if command succeeded
+        if result.code == 0 then
+          local name = (result.stdout or ''):gsub('%*', ''):gsub('%s+', '')
+          if name ~= '' then
+            _cache = name
+            _dirty = false
+            vim.cmd.redrawstatus()
+            return
+          end
+        end
+
+        -- No bookmark found or command failed: show the short change ID of @
+        vim.system(
+          { 'jj', 'log', '-r', '@', '--no-graph', '-T', 'change_id.short()', '--no-pager', '--ignore-working-copy' },
+          { text = true },
+          vim.schedule_wrap(function(id_result)
+            _fetching = false
+
+            if id_result.code == 0 then
+              _cache = (id_result.stdout or ''):gsub('%s+', '')
+              _dirty = false
+            else
+              _cache = nil
+            end
+            vim.cmd.redrawstatus()
+          end)
+        )
+      end)
+    )
   end
 
-  -- No bookmark found: show the short change ID of the working-copy commit
-  local id = vim.fn.system('jj log -r @ --no-graph -T "change_id.short()" --no-pager --ignore-working-copy 2>/dev/null')
-  _cache = id:gsub('%s+', '')
-  _dirty = false
-  return _cache
+  return _cache or ''
 end
 
 ---@return string
