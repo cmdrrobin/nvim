@@ -104,10 +104,12 @@ local function on_jump(diagnostic, bufnr)
   if not diagnostic then
     return
   end
-  -- FIXME(robin): opts.jump.float is deprecrated. Need to use opts.jump.on_jump instead.
-  -- Still issue when moving forward in diagnostic, it will not show the next diagnostic directly.
-  -- vim.diagnostic.open_float({ diagnostic }, bufnr)
-  vim.diagnostic.show(diagnostic.namespace, bufnr, { diagnostic }, { virtual_text = { current_line = true } })
+  -- Open the current diagnostic in a floating window so it updates as we jump
+  vim.diagnostic.open_float({
+    scope = 'cursor',
+    focusable = false,
+    close_events = { 'CursorMoved', 'CursorMovedI', 'BufHidden', 'InsertEnter' },
+  }, bufnr)
 end
 
 -- Diagnostic Config
