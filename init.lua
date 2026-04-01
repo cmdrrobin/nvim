@@ -17,7 +17,7 @@ require('keymaps')
 require('autocommands')
 require('commands')
 require('statusline')
-require('sessions')
+-- require('sessions')
 
 -- [[ Plugins ]]
 require('plugins.colorscheme')

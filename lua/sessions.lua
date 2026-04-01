@@ -16,9 +16,21 @@ local function get_last_session_file()
   return session_dir .. 'last_session.vim'
 end
 
+local function get_no_session_file()
+  local cwd = vim.fn.getcwd()
+  local session_name = cwd:gsub('/', '%%')
+  return session_dir .. session_name .. '.no_session'
+end
+
 -- Auto-restore session when starting with no arguments
 vim.api.nvim_create_autocmd('VimEnter', {
   callback = function()
+    -- Skip if session management is disabled for this project
+    local no_session_file = get_no_session_file()
+    if vim.fn.filereadable(no_session_file) == 1 then
+      return
+    end
+
     -- Only restore if no files were specified
     if vim.fn.argc() == 0 then
       local session_file = get_session_file()
@@ -32,6 +44,11 @@ vim.api.nvim_create_autocmd('VimEnter', {
 
 vim.api.nvim_create_autocmd('VimLeavePre', {
   callback = function()
+    local no_session_file = get_no_session_file()
+    if vim.fn.filereadable(no_session_file) == 1 then
+      return
+    end
+
     local stop_file = session_dir .. '.stop_saving'
     if vim.fn.filereadable(stop_file) == 1 then
       vim.fn.delete(stop_file) -- Remove stop file for next time
@@ -100,9 +117,37 @@ vim.keymap.set('n', '<leader>qS', function()
   end)
 end, { desc = 'Select session to load' })
 
--- Stop session saving (create a flag file)
+-- Stop session saving (create a flag file for one-time skip)
 vim.keymap.set('n', '<leader>qd', function()
   local stop_file = session_dir .. '.stop_saving'
   vim.fn.writefile({}, stop_file)
-  print('Session saving stopped')
-end, { desc = 'Stop session saving' })
+  print('Session saving stopped for this exit')
+end, { desc = 'Stop session saving for this exit' })
+
+-- Disable session management permanently for current project
+vim.keymap.set('n', '<leader>qD', function()
+  local no_session_file = get_no_session_file()
+  local session_file = get_session_file()
+
+  -- Create the no_session flag file
+  vim.fn.writefile({}, no_session_file)
+
+  -- Delete existing session file if it exists
+  if vim.fn.filereadable(session_file) == 1 then
+    vim.fn.delete(session_file)
+  end
+
+  print('Session management disabled for current project')
+end, { desc = 'Disable session management for current project' })
+
+-- Re-enable session management for current project
+vim.keymap.set('n', '<leader>qE', function()
+  local no_session_file = get_no_session_file()
+
+  if vim.fn.filereadable(no_session_file) == 1 then
+    vim.fn.delete(no_session_file)
+    print('Session management enabled for current project')
+  else
+    print('Session management was already enabled for current project')
+  end
+end, { desc = 'Enable session management for current project' })
