@@ -38,6 +38,7 @@ for mode, hl in pairs({
   Replace = { bg = colors.pine, fg = colors.base, bold = true },
   Command = { bg = colors.love, fg = colors.base, bold = true },
   Inactive = { bg = colors.surface, fg = colors.base, bold = true },
+  Other = { bg = colors.leaf, fg = colors.base, bold = true },
 }) do
   statusline_hls['StatuslineMode' .. mode] = hl
 end
@@ -114,20 +115,33 @@ local mode_hls = {
 }
 
 --- Current mode.
+---@param mode string
 ---@return string
-function M.mode_component()
-  local mode = modes[vim.api.nvim_get_mode().mode] or 'UNKNOWN'
+function M.mode_component(mode)
   local hl = mode_hls[mode] or 'Other'
   return string.format('%%#StatuslineMode%s# %s %%#Statusline#', hl, mode)
 end
 
--- Detect if the current working directory is a Jujutsu repository
+--- cache is_jj() result; nil means not yet computed.
+---@type boolean|nil
+local _is_jj_cache = nil
+
+-- Detect if the current working directory is a Jujutsu repository.
 ---@return boolean
 function M.is_jj()
-  local is_jj_exec = vim.fn.executable('jj') == 1
-  local is_jj_repo = vim.fn.isdirectory(vim.fn.getcwd() .. '/.jj') == 1
-  return is_jj_exec and is_jj_repo
+  if _is_jj_cache == nil then
+    _is_jj_cache = vim.fn.executable('jj') == 1 and vim.fn.isdirectory(vim.fn.getcwd() .. '/.jj') == 1
+  end
+  return _is_jj_cache
 end
+
+-- Invalidate is_jj cache when directory changes.
+vim.api.nvim_create_autocmd({ 'DirChanged', 'BufEnter' }, {
+  group = vim.api.nvim_create_augroup('cmdrrobin/is_jj_cache-statusline', { clear = true }),
+  callback = function()
+    _is_jj_cache = nil
+  end,
+})
 
 ---@type nil|string
 local _cache = nil -- last computed status string
@@ -139,7 +153,7 @@ local _fetching = false -- true = async fetch already in-flight
 -- Invalidate whenever the user writes a buffer or enters a new buffer
 -- (switching projects may change the jj context entirely).
 vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter' }, {
-  group = vim.api.nvim_create_augroup('jj_status_cache', { clear = true }),
+  group = vim.api.nvim_create_augroup('cmdrrobin/jj-statusline', { clear = true }),
   callback = function()
     _dirty = true
   end,
@@ -161,13 +175,11 @@ function M.jj_status()
       { 'jj', 'log', '-r', 'closest_bookmark(@-)', '--no-pager', '--no-graph', '--ignore-working-copy', '-T', 'bookmarks' },
       { text = true },
       vim.schedule_wrap(function(result)
-        -- Always reset fetching flag, even on failure
-        _fetching = false
-
-        -- Only process if command succeeded
         if result.code == 0 then
           local name = (result.stdout or ''):gsub('%*', ''):gsub('%s+', '')
           if name ~= '' then
+            -- Terminal state: bookmark found.
+            _fetching = false
             _cache = name
             _dirty = false
             vim.cmd.redrawstatus()
@@ -175,19 +187,23 @@ function M.jj_status()
           end
         end
 
-        -- No bookmark found or command failed: show the short change ID of @
+        -- No bookmark found or command failed: show the short change ID of @.
+        -- _fetching remains true while the inner call is in-flight.
         vim.system(
           { 'jj', 'log', '-r', '@', '--no-graph', '-T', 'change_id.short()', '--no-pager', '--ignore-working-copy' },
           { text = true },
           vim.schedule_wrap(function(id_result)
+            -- Terminal state: inner call complete (success or failure).
             _fetching = false
 
             if id_result.code == 0 then
               _cache = (id_result.stdout or ''):gsub('%s+', '')
-              _dirty = false
             else
               _cache = nil
             end
+            -- always clear _dirty even on failure to prevent a busy-retry loop
+            -- where every render triggers a new fetch chain.
+            _dirty = false
             vim.cmd.redrawstatus()
           end)
         )
@@ -200,7 +216,11 @@ end
 
 ---@return string
 function M.jj_component()
-  return icons.misc.Bookmark .. ' ' .. M.jj_status()
+  local status = M.jj_status()
+  if status == '' then
+    return ''
+  end
+  return icons.misc.Bookmark .. ' ' .. status
 end
 
 ---@return string
@@ -227,11 +247,11 @@ local progress_status = {
   title = nil,
 }
 
-local processing = false
 local spinner_index = 1
 local spinner_timer = nil
 
----@type table<string>
+-- Spinner symbols to indicate LSP in process
+---@type string[]
 local spinner_symbols = {
   '⠋',
   '⠙',
@@ -246,7 +266,7 @@ local spinner_symbols = {
 }
 
 vim.api.nvim_create_autocmd('LspProgress', {
-  group = vim.api.nvim_create_augroup('cmdrrobin/statusline', { clear = true }),
+  group = vim.api.nvim_create_augroup('cmdrrobin/lsp-statusline', { clear = true }),
   desc = 'Update LSP progress in statusline',
   pattern = { 'begin', 'end' },
   callback = function(args)
@@ -255,19 +275,21 @@ vim.api.nvim_create_autocmd('LspProgress', {
       return
     end
 
+    -- guard against nil params/value fields from non-standard LSP servers.
+    local value = (args.data.params or {}).value or {}
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
     progress_status = {
-      client = vim.lsp.get_client_by_id(args.data.client_id).name,
-      kind = args.data.params.value.kind,
-      title = args.data.params.value.title,
+      client = client and client.name or nil,
+      kind = value.kind,
+      title = value.title,
     }
 
     if progress_status.kind == 'end' then
       progress_status.title = nil
-      processing = false
       -- Stop timer
       if spinner_timer then
         spinner_timer:stop()
-        spinner_timer:close()
+        spinner_timer:close(function() end)
         spinner_timer = nil
       end
       -- Wait a bit before clearing the status.
@@ -275,12 +297,11 @@ vim.api.nvim_create_autocmd('LspProgress', {
         vim.cmd.redrawstatus()
       end, 1000)
     else
-      processing = true
-      -- Start timer to update statusline every 100ms
       if not spinner_timer then
         spinner_timer = vim.uv.new_timer()
         if spinner_timer then
           spinner_timer:start(0, 100, function()
+            spinner_index = (spinner_index % #spinner_symbols) + 1
             vim.schedule(function()
               vim.cmd.redrawstatus()
             end)
@@ -292,22 +313,20 @@ vim.api.nvim_create_autocmd('LspProgress', {
 })
 
 --- The latest LSP progress message.
+---@param mode string
 ---@return string
-function M.lsp_progress_component()
+function M.lsp_progress_component(mode)
   if not progress_status.client or not progress_status.title then
     return ''
   end
 
   -- Avoid noisy messages while typing.
-  if vim.startswith(vim.api.nvim_get_mode().mode, 'i') then
+  -- All insert-mode raw codes ('i', 'ic', 'ix') resolve to 'INSERT' in the modes table.
+  if mode == 'INSERT' then
     return ''
   end
 
-  if processing then
-    spinner_index = (spinner_index % #spinner_symbols) + 1
-    return '%#StatuslineSpinner#' .. spinner_symbols[spinner_index] .. '%#StatuslineTitle# ' .. progress_status.client .. '%#Statusline#'
-  end
-  return string.format('%%#StatuslineTitle#%s  ', progress_status.client)
+  return '%#StatuslineSpinner#' .. spinner_symbols[spinner_index] .. '%#StatuslineTitle# ' .. progress_status.client .. '%#Statusline#'
 end
 
 ---@return string
@@ -318,19 +337,21 @@ end
 --- File-content encoding for the current buffer.
 ---@return string
 function M.encoding_component()
-  local encoding = vim.opt.fileencoding:get()
-  return encoding ~= '' and string.format('%%#StatuslineModeSeparatorOther# %s', encoding) or ''
+  -- use vim.bo.fileencoding (direct access, no option-accessor object allocation).
+  -- use defined highlight group StatuslineInfo instead of the undefined StatuslineModeSeparatorOther.
+  local encoding = vim.bo.fileencoding
+  return encoding ~= '' and string.format('%%#StatuslineInfo# %s', encoding) or ''
 end
 
 --- The current line, total line count, and column position.
+--- accepts pre-computed mode string from render() to avoid a redundant nvim_get_mode() call.
+---@param mode string
 ---@return string
-function M.position_component()
+function M.position_component(mode)
   local line = vim.fn.line('.')
   local line_count = vim.api.nvim_buf_line_count(0)
   local col = vim.fn.virtcol('.')
 
-  -- Get mode highlight
-  local mode = modes[vim.api.nvim_get_mode().mode] or 'UNKNOWN'
   local hl_suffix = mode_hls[mode] or 'Other'
   local mode_hl = 'StatuslineMode' .. hl_suffix
 
@@ -355,6 +376,7 @@ end
 ---@return string
 function M.apply_icon(filetype)
   local icon, hl_group
+  -- NOTE(robin): this cannot be loaded at module level. When do so, no icons are shown
   local _devicons_ok, _devicons = pcall(require, 'nvim-web-devicons')
 
   if _devicons_ok then
@@ -373,11 +395,11 @@ function M.apply_icon(filetype)
   return string.format('%%#%s#%s %%#Statusline#', hl_group, icon)
 end
 
----@return string|nil
+---@return string
 function M.filetype_component()
   local ft = vim.bo.filetype
   if ft == '' then -- return nothing when filetype is unknown
-    return nil
+    return ''
   end
   return M.apply_icon(ft) .. ft
 end
@@ -388,30 +410,38 @@ function M.filename_component()
 end
 
 --- Joins non-empty components with two spaces.
----@param components string[]
+---@param components (string|nil)[]
 ---@return string
 local function concat_components(components)
-  return vim.iter(components):skip(1):fold(components[1], function(acc, component)
-    return #component > 0 and string.format('%s  %s', acc, component) or acc
+  -- seed accumulator with '' and guard against nil values so that an empty or nil
+  -- first component never produces a leading separator.
+  return vim.iter(components):fold('', function(acc, component)
+    if not component or #component == 0 then
+      return acc
+    end
+    return acc == '' and component or string.format('%s  %s', acc, component)
   end)
 end
 
 --- Renders the statusline.
 ---@return string
 function M.render()
+  -- compute mode once and pass it to all components that need it,
+  -- avoiding repeated nvim_get_mode() calls per render.
+  local mode = modes[vim.api.nvim_get_mode().mode] or 'UNKNOWN'
   return table.concat({
     concat_components({
-      M.mode_component(),
+      M.mode_component(mode),
       M.git_component(),
       M.diagnostics_component(),
       M.filename_component(),
     }),
     '%=', -- align to right
     concat_components({
-      M.lsp_progress_component(),
+      M.lsp_progress_component(mode),
       M.spaces_component(),
       M.filetype_component(),
-      M.position_component(),
+      M.position_component(mode),
     }),
   })
 end
