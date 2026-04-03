@@ -151,5 +151,11 @@ vim.api.nvim_create_user_command('LspInfo', function()
   vim.cmd('silent checkhealth vim.lsp')
 end, {})
 
+vim.api.nvim_create_user_command('Diagnostics', function()
+  vim.diagnostic.setqflist({
+    { severity = { min = vim.diagnostic.severity.WARN } },
+  })
+end, { desc = 'Show all diagnostics in the quickfix' })
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
