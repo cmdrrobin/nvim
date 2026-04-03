@@ -55,5 +55,70 @@ vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter' }, {
   end,
 })
 
+-- Open a Snacks picker to select and enable a Mason-installed LSP server
+local function pick_and_enable_lsp()
+  local ok, mr = pcall(require, 'mason-registry')
+  if not ok then
+    vim.notify('mason-registry is not available', vim.log.levels.ERROR)
+    return
+  end
+
+  local items = {}
+  for _, pkg in ipairs(mr.get_installed_packages()) do
+    local spec = pkg.spec
+    local lsp_name = vim.tbl_get(spec, 'neovim', 'lspconfig')
+    if lsp_name then
+      local is_active = #vim.lsp.get_clients({ name = lsp_name }) > 0
+
+      table.insert(items, {
+        text = lsp_name,
+        lsp_name = lsp_name,
+        mason_name = pkg.name,
+        is_active = is_active,
+      })
+    end
+  end
+
+  table.sort(items, function(a, b)
+    return a.lsp_name < b.lsp_name
+  end)
+
+  if #items == 0 then
+    vim.notify('No LSP servers installed via Mason', vim.log.levels.WARN)
+    return
+  end
+
+  require('snacks').picker.pick({
+    title = 'Enable LSP Server',
+    items = items,
+    format = function(item)
+      local ret = { { item.lsp_name, 'SnacksPickerLabel' } }
+      if item.mason_name ~= item.lsp_name then
+        table.insert(ret, { '  ' .. item.mason_name, 'Comment' })
+      end
+      if item.is_active then
+        table.insert(ret, { '  active', 'DiagnosticOk' })
+      end
+      return ret
+    end,
+    layout = { preset = 'vertical', preview = false },
+    confirm = function(picker, item)
+      picker:close()
+      if item then
+        vim.schedule(function()
+          vim.lsp.enable(item.lsp_name)
+          vim.notify('LSP enabled: ' .. item.lsp_name, vim.log.levels.INFO)
+        end)
+      end
+    end,
+  })
+end
+
+vim.api.nvim_create_user_command('MasonEnableLSP', pick_and_enable_lsp, {
+  desc = 'Pick and enable a Mason-installed LSP server',
+})
+
+vim.keymap.set('n', '<leader>ml', pick_and_enable_lsp, { desc = '[M]ason enable [L]SP' })
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
