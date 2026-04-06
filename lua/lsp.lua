@@ -108,7 +108,6 @@ local function on_jump(diagnostic, bufnr)
   vim.diagnostic.open_float({
     scope = 'cursor',
     focusable = false,
-    close_events = { 'CursorMoved', 'CursorMovedI', 'BufHidden', 'InsertEnter' },
   }, bufnr)
 end
 
