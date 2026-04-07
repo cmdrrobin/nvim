@@ -17,7 +17,9 @@ require('keymaps')
 require('autocommands')
 require('commands')
 require('statusline')
--- require('sessions')
+
+-- [[ Neovim experimental features ]]
+require('vim._core.ui2').enable()
 
 -- [[ Plugins ]]
 require('plugins.colorscheme')
