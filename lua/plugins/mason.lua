@@ -29,7 +29,7 @@ vim.pack.add({
   { src = 'https://github.com/mason-org/mason.nvim', data = { build = 'MasonUpdate' } },
 }, { confirm = false })
 
-vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter' }, {
+vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufReadPre' }, {
   once = true,
   callback = function()
     require('mason').setup()

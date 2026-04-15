@@ -17,7 +17,7 @@ local disable_filetypes = { c = true, cpp = true }
 
 vim.pack.add({ 'https://github.com/stevearc/conform.nvim' })
 
-vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
+vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
   once = true,
   callback = function()
     ---@module 'conform.types'
