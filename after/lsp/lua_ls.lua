@@ -3,21 +3,14 @@ return {
   settings = {
     Lua = {
       format = { enable = false },
-      diagnostics = {
-        globals = { 'vim', 'opt', 'cmd' },
-      },
+      -- diagnostics = {
+      --   globals = { 'vim', 'opt', 'cmd' },
+      -- },
       completion = {
         callSnippet = 'Replace',
       },
       runtime = {
         version = 'LuaJIT',
-      },
-      workspace = {
-        checkThirdParty = false,
-        library = {
-          vim.env.VIMRUNTIME,
-          '${3rd}/luv/library',
-        },
       },
     },
   },
