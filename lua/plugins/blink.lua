@@ -115,27 +115,6 @@ vim.api.nvim_create_autocmd('InsertEnter', {
       -- Could use `prefer_rust`, which do the same, but without warning
       fuzzy = { implementation = 'prefer_rust_with_warning' },
     })
-
-    -- Extend neovim's client capabilities with the completion ones.
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities = vim.tbl_deep_extend('force', capabilities, blink.get_lsp_capabilities(nil, false))
-
-    -- When required, add some custom capabilities settings
-    capabilities = vim.tbl_deep_extend('force', capabilities, {
-      textDocument = {
-        completion = {
-          completionItem = {
-            snippetSupport = true,
-          },
-        },
-        foldingRange = {
-          dynamicRegistration = false,
-          lineFoldingOnly = true,
-        },
-      },
-    })
-
-    vim.lsp.config('*', { capabilities = capabilities })
   end,
 })
 
