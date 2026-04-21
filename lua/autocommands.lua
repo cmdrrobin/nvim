@@ -65,11 +65,18 @@ vim.api.nvim_create_autocmd('PackChanged', {
     if kind ~= 'install' and kind ~= 'update' then
       return
     end
-    if (ev.data.spec.data or {}).build then
+    local data = ev.data.spec.data or {}
+    if data.build then
       if not ev.data.active then
         vim.cmd.packadd(name)
       end
-      vim.cmd(ev.data.spec.data.build)
+      if data.setup then
+        local ok, mod = pcall(require, data.setup)
+        if ok and type(mod) == 'table' and type(mod.setup) == 'function' then
+          mod.setup()
+        end
+      end
+      vim.cmd(data.build)
     end
   end,
 })

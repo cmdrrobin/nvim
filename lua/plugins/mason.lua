@@ -26,7 +26,7 @@ local ensure_installed = {
 }
 
 vim.pack.add({
-  { src = 'https://github.com/mason-org/mason.nvim', data = { build = 'MasonUpdate' } },
+  { src = 'https://github.com/mason-org/mason.nvim', data = { build = 'MasonUpdate', setup = 'mason' } },
 }, { confirm = false })
 
 vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufReadPre' }, {
