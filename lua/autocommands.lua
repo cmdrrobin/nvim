@@ -57,6 +57,15 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+-- Set filetype to jinja when opening jinja2 file extensions
+vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
+  group = vim.api.nvim_create_augroup('cmdrrobin-jinja-detect', { clear = true }),
+  pattern = { '*.j2' },
+  callback = function()
+    vim.bo.filetype = 'jinja'
+  end,
+})
+
 -- Run commands when packages has been updated
 vim.api.nvim_create_autocmd('PackChanged', {
   group = vim.api.nvim_create_augroup('cmdrrobin.plugin.install', {}),
