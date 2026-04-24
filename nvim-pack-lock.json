@@ -1,7 +1,7 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "0c303573345e710a233f5ba75f9aadc05852771b",
+      "rev": "6db1246640e9e1bdf8a1d1f6d27a940fc0a572d5",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "blink.cmp": {
@@ -22,7 +22,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "gitsigns.nvim": {
-      "rev": "6d808f99bd63303646794406e270bd553ad7792e",
+      "rev": "dd3f588bacbeb041be6facf1742e42097f62165d",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "markdown-preview.nvim": {
@@ -30,7 +30,7 @@
       "src": "https://github.com/iamcco/markdown-preview.nvim"
     },
     "mason.nvim": {
-      "rev": "cf8f0f84b0b7866b0b8153cd07902770e1fc02d0",
+      "rev": "cb8445f8ce85d957416c106b780efd51c6298f89",
       "src": "https://github.com/mason-org/mason.nvim"
     },
     "mini.align": {
@@ -51,7 +51,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "e146efacbafed3789ac568abcc5a981c5decaa58",
+      "rev": "31026a13eefb20681124706a79fc1df6bf11ab27",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
@@ -79,7 +79,7 @@
       "src": "https://github.com/nvim-lua/plenary.nvim"
     },
     "rose-pine": {
-      "rev": "9504524e5ed0e326534698f637f9d038ba4cd0ee",
+      "rev": "6a961effd67f6130d36df6d1c05c48c739796dd2",
       "src": "https://github.com/rose-pine/neovim"
     },
     "snacks.nvim": {
