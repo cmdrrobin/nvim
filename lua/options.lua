@@ -113,5 +113,14 @@ vim.g.snacks_image = true
 -- Set to false if virtual text diagnostics no to be undone
 vim.g.have_virtual_text = true
 
+-- [[ Experimental Options ]]
+-- The following options are experimental for Neovim 0.12 (or higher)
+
+-- Optimize loading of Neovim
+vim.loader.enable()
+
+-- Make use of new statusline
+require('vim._core.ui2').enable()
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

@@ -43,6 +43,10 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
         }
       end,
       formatters_by_ft = formatters_by_ft,
+      formatters = {
+        -- Require a Prettier configuration file to format.
+        prettier = { require_cwd = true },
+      },
     })
   end,
 })

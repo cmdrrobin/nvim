@@ -98,17 +98,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
---- @param diagnostic? vim.Diagnostic
 --- @param bufnr integer
-local function on_jump(diagnostic, bufnr)
-  if not diagnostic then
-    return
-  end
+local function on_jump(_, bufnr)
   -- Open the current diagnostic in a floating window so it updates as we jump
   vim.diagnostic.open_float({
+    bufnr = bufnr,
     scope = 'cursor',
     focusable = false,
-  }, bufnr)
+  })
 end
 
 -- Diagnostic Config

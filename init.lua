@@ -18,9 +18,6 @@ require('autocommands')
 require('commands')
 require('statusline')
 
--- [[ Neovim experimental features ]]
-require('vim._core.ui2').enable()
-
 -- [[ Plugins ]]
 require('plugins.colorscheme')
 require('plugins.treesitter')
