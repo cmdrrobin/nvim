@@ -29,6 +29,14 @@ local TS = require('nvim-treesitter')
 -- Setup treesitter
 TS.setup()
 
+-- Main-branch nvim-treesitter ships queries under `runtime/queries/`,
+-- which isn't on rtp by default. Prepend it so highlights/folds/indents
+-- are visible to `vim.treesitter.start`.
+local init = vim.api.nvim_get_runtime_file('lua/nvim-treesitter/init.lua', false)[1]
+if init then
+  vim.opt.runtimepath:prepend(vim.fn.fnamemodify(init, ':h:h:h') .. '/runtime')
+end
+
 -- ensure basic parsers are installed
 TS.install(ensure_installed)
 
