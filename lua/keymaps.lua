@@ -45,6 +45,7 @@ vim.keymap.set('n', '<C-Right>', ':vertical resize +2<CR>', { silent = true })
 
 -- Buffers
 vim.keymap.set('n', '<S-q>', ':bd!<CR>') -- delete current buffer
+vim.keymap.set('n', '<leader>bo', '<cmd>%bd|e#|bd#<CR>', { desc = 'Close other buffers' })
 
 -- File Explorer
 vim.keymap.set('n', '<leader>pv', '<cmd>Ex<CR>', { desc = 'Open Netrw' })
