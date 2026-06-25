@@ -1,9 +1,9 @@
-vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
-  once = true,
-  callback = function()
-    vim.pack.add({ 'https://github.com/laytan/cloak.nvim' })
+local add_on_event = require('vim-pack').add_on_event
 
-    require('cloak').setup({
+add_on_event({ 'BufReadPre', 'BufNewFile' }, {
+  {
+    src = 'https://github.com/laytan/cloak.nvim',
+    opts = {
       enabled = true,
       cloak_character = '*',
       -- The applied highlight group (colors) on the cloaking, see `:h highlight`.
@@ -23,6 +23,6 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
           cloak_pattern = '=.+',
         },
       },
-    })
-  end,
+    },
+  }
 })

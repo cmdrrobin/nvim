@@ -1,3 +1,5 @@
+local add_on_event = require('vim-pack').add_on_event
+
 -- Define linters based on filetype
 local linters_by_ft = {
   markdown = { 'markdownlint-cli2' },
@@ -5,11 +7,9 @@ local linters_by_ft = {
   yaml = { 'yamllint' },
 }
 
-vim.pack.add({ 'https://github.com/mfussenegger/nvim-lint' })
-
-vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
-  once = true,
-  callback = function()
+add_on_event({ 'BufReadPre', 'BufNewFile' }, {
+  src = 'https://github.com/mfussenegger/nvim-lint',
+  on_setup = function()
     local lint = require('lint')
 
     lint.linters_by_ft = linters_by_ft

@@ -1,8 +1,8 @@
-vim.api.nvim_create_autocmd('UIEnter', {
-  once = true,
-  callback = function()
-    vim.pack.add({ 'https://github.com/christoomey/vim-tmux-navigator' })
+local add_on_event = require('vim-pack').add_on_event
 
+add_on_event('UIEnter', {
+  src = 'https://github.com/christoomey/vim-tmux-navigator',
+  on_setup = function()
     -- Remove existing mappings
     vim.keymap.del('n', '<C-h>')
     vim.keymap.del('n', '<C-j>')

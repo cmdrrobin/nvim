@@ -1,16 +1,16 @@
-vim.pack.add({
-  { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') },
+local add = require('vim-pack').add
+local add_on_event = require('vim-pack').add_on_event
+
+add({
+  { src = 'https://github.com/saghen/blink.lib', setup = false },
+  { src = 'https://github.com/rafamadriz/friendly-snippets', setup = false },
 })
 
-vim.schedule(function()
-  vim.pack.add({ 'https://github.com/rafamadriz/friendly-snippets' })
-end)
-
-vim.api.nvim_create_autocmd('InsertEnter', {
-  once = true,
-  callback = function()
-    local blink = require('blink.cmp')
-    blink.setup({
+add_on_event('InsertEnter', {
+  {
+    src = 'https://github.com/saghen/blink.cmp',
+    version = vim.version.range('1.x'),
+    opts = {
       -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
       -- 'super-tab' for mappings similar to vscode (tab to accept)
       -- 'enter' for enter to accept
@@ -114,8 +114,11 @@ vim.api.nvim_create_autocmd('InsertEnter', {
       -- use Rust when available, or fallback to lua
       -- Could use `prefer_rust`, which do the same, but without warning
       fuzzy = { implementation = 'prefer_rust_with_warning' },
-    })
-  end,
+    },
+    on_setup = function()
+      require('blink.cmp').build():pwait()
+    end,
+  },
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`

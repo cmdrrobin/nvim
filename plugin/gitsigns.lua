@@ -1,12 +1,9 @@
-vim.pack.add({ 'https://github.com/lewis6991/gitsigns.nvim' })
+local add_on_event = require('vim-pack').add_on_event
 
-vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
-  once = true,
-  callback = function()
-    ---@module 'gitsigns.config'
-    ---@type Gitsigns.Config
-    ---@diagnostic disable: missing-fields
-    require('gitsigns').setup({
+add_on_event({ 'BufReadPre', 'BufNewFile' }, {
+  {
+    src = 'https://github.com/lewis6991/gitsigns.nvim',
+    opts = {
       signs = {
         add = { text = '+' },
         change = { text = '~' },
@@ -47,8 +44,8 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
         vim.keymap.set('n', '<leader>td', require('gitsigns').preview_hunk_inline, { buffer = bufnr, desc = 'Toggle Deleted' })
         -- stylua: ignore start
       end,
-    })
-  end,
+    },
+  },
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`

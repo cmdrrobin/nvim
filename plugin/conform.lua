@@ -11,18 +11,42 @@ local formatters_by_ft = {
   -- For filetypes without a formatter
   ['_'] = { 'trim_whitespace', 'trim_newlines' },
 }
+-- Define formatting based on filetype
+local formatters_by_ft = {
+  dockerfile = { 'hadolint' },
+  go = { 'goimports', 'gofumpt' },
+  lua = { 'stylua' },
+  python = { 'ruff' },
+  terraform = { 'terraform_fmt' },
+  tf = { 'terraform_fmt' },
+  ['terraform-vars'] = { 'terraform_fmt' },
+  yaml = { 'prettier' },
+  -- For filetypes without a formatter
+  ['_'] = { 'trim_whitespace', 'trim_newlines' },
+}
+local add_on_event = require('vim-pack').add_on_event
+
 -- Disable "format_on_save lsp_fallback" for languages that don't
 -- have a well standardized coding style.
 local disable_filetypes = { c = true, cpp = true }
 
-vim.pack.add({ 'https://github.com/stevearc/conform.nvim' })
-
-vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
-  once = true,
-  callback = function()
-    ---@module 'conform.types'
-    ---@type conform.setupOpts
-    require('conform').setup({
+add_on_event('BufWritePre', {
+  {
+    src = 'https://github.com/stevearc/conform.nvim',
+    opts = {
+      -- Define formatting based on filetype
+      formatters_by_ft = {
+        dockerfile = { 'hadolint' },
+        go = { 'goimports', 'gofumpt' },
+        lua = { 'stylua' },
+        python = { 'ruff' },
+        terraform = { 'terraform_fmt' },
+        tf = { 'terraform_fmt' },
+        ['terraform-vars'] = { 'terraform_fmt' },
+        yaml = { 'prettier' },
+        -- For filetypes without a formatter
+        ['_'] = { 'trim_whitespace', 'trim_newlines' },
+      },
       notify_on_error = false,
       format_on_save = function(bufnr)
         local lsp_format_opt
@@ -42,13 +66,12 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
           lsp_format = lsp_format_opt,
         }
       end,
-      formatters_by_ft = formatters_by_ft,
       formatters = {
         -- Require a Prettier configuration file to format.
         prettier = { require_cwd = true },
       },
-    })
-  end,
+    },
+  },
 })
 
 vim.api.nvim_create_user_command('ToggleFormat', function(opts)

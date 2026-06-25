@@ -8,6 +8,7 @@ return {
       validate = true,
       -- Using the schemastore plugin for schemas.
       schemastore = { enable = false, url = '' },
+      -- schemas = require('schemastore').yaml.schemas(),
     },
   },
 }

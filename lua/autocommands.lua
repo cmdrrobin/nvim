@@ -67,28 +67,28 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
 })
 
 -- Run commands when packages has been updated
-vim.api.nvim_create_autocmd('PackChanged', {
-  group = vim.api.nvim_create_augroup('cmdrrobin.plugin.install', {}),
-  callback = function(ev)
-    local name, kind = ev.data.spec.name, ev.data.kind
-    if kind ~= 'install' and kind ~= 'update' then
-      return
-    end
-    local data = ev.data.spec.data or {}
-    if data.build then
-      if not ev.data.active then
-        vim.cmd.packadd(name)
-      end
-      if data.setup then
-        local ok, mod = pcall(require, data.setup)
-        if ok and type(mod) == 'table' and type(mod.setup) == 'function' then
-          mod.setup()
-        end
-      end
-      vim.cmd(data.build)
-    end
-  end,
-})
+-- vim.api.nvim_create_autocmd('PackChanged', {
+--   group = vim.api.nvim_create_augroup('cmdrrobin.plugin.install', {}),
+--   callback = function(ev)
+--     local name, kind = ev.data.spec.name, ev.data.kind
+--     if kind ~= 'install' and kind ~= 'update' then
+--       return
+--     end
+--     local data = ev.data.spec.data or {}
+--     if data.build then
+--       if not ev.data.active then
+--         vim.cmd.packadd(name)
+--       end
+--       if data.setup then
+--         local ok, mod = pcall(require, data.setup)
+--         if ok and type(mod) == 'table' and type(mod.setup) == 'function' then
+--           mod.setup()
+--         end
+--       end
+--       vim.cmd(data.build)
+--     end
+--   end,
+-- })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

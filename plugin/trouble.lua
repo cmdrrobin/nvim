@@ -1,12 +1,11 @@
 -- A pretty list for showing diagnostics, references, telescope results,
 -- quickfix and location lists to help you solve all the trouble your code
 -- is causing.
-vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
-  once = true,
-  callback = function()
-    vim.pack.add({ 'https://github.com/folke/trouble.nvim' })
-    require('trouble').setup()
+local add_on_event = require('vim-pack').add_on_event
 
+add_on_event({ 'BufReadPre', 'BufNewFile' }, {
+  src = 'https://github.com/folke/trouble.nvim',
+  on_setup = function()
     vim.keymap.set('n', '<leader>xx', '<cmd>Trouble diagnostics toggle<cr>', { desc = 'Document Diagnostics (Trouble)' })
     vim.keymap.set('n', '<leader>xX', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', { desc = 'Workspace Diagnostics (Trouble)' })
     vim.keymap.set('n', '<leader>cs', '<cmd>Trouble symbols toggle<cr>', { desc = 'Symbols (Trouble)' })
