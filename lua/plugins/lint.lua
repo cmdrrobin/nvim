@@ -2,6 +2,7 @@
 local linters_by_ft = {
   markdown = { 'markdownlint-cli2' },
   ansible = { 'ansible_lint' },
+  yaml = { 'yamllint' },
 }
 
 vim.pack.add({ 'https://github.com/mfussenegger/nvim-lint' })

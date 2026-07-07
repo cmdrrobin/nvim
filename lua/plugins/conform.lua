@@ -7,7 +7,7 @@ local formatters_by_ft = {
   terraform = { 'terraform_fmt' },
   tf = { 'terraform_fmt' },
   ['terraform-vars'] = { 'terraform_fmt' },
-  yaml = { 'prettier' },
+  yaml = { 'yamlfmt' },
   -- For filetypes without a formatter
   ['_'] = { 'trim_whitespace', 'trim_newlines' },
 }
