@@ -1,25 +1,23 @@
--- Start build process when installing or updating markdown-preview.nvim plugin
-vim.api.nvim_create_autocmd('PackChanged', {
-  callback = function(ev)
-    local name, kind = ev.data.spec.name, ev.data.kind
+local add_on_file_type = require('vim-pack').add_on_file_type
+local on_plugin_update = require('vim-pack').on_plugin_update
 
-    -- Run build script after plugin's code has changed
-    if name == 'markdown-preview.nvim' and (kind == 'install' or kind == 'update') then
-      vim.system({ 'npx', '--yes', 'yarn', 'install' }, { cwd = ev.data.path .. '/app' })
-    end
-  end,
+-- Markdown preview on the browser.
+add_on_file_type('markdown', {
+  {
+    src = 'https://github.com/iamcco/markdown-preview.nvim',
+    -- Vimscript-driven plugin: no Lua setup() to call.
+    setup = false,
+    on_setup = function()
+      vim.keymap.set('n', '<leader>mp', '<cmd>MarkdownPreviewToggle<cr>', {
+        desc = 'Markdown Preview',
+      })
+    end,
+  },
 })
 
-vim.api.nvim_create_autocmd('FileType', {
-  group = vim.api.nvim_create_augroup('cmdrrobin-markdown-detect', { clear = true }),
-  pattern = 'markdown',
-  callback = function()
-    vim.pack.add({ 'https://github.com/iamcco/markdown-preview.nvim' })
-    vim.g.mkdp_filetypes = { 'markdown' }
-
-    vim.keymap.set('n', '<leader>mp', '<cmd>MarkdownPreview<CR>', { silent = true, desc = '[M]arkdown [P]review' })
-  end,
-})
+on_plugin_update('markdown-preview.nvim', function()
+  vim.fn['mkdp#util#install_sync'](true)
+end)
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

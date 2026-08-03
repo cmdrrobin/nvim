@@ -1,29 +1,3 @@
--- Define formatting based on filetype
-local formatters_by_ft = {
-  dockerfile = { 'hadolint' },
-  go = { 'goimports', 'gofumpt' },
-  lua = { 'stylua' },
-  python = { 'ruff' },
-  terraform = { 'terraform_fmt' },
-  tf = { 'terraform_fmt' },
-  ['terraform-vars'] = { 'terraform_fmt' },
-  yaml = { 'yamlfmt' },
-  -- For filetypes without a formatter
-  ['_'] = { 'trim_whitespace', 'trim_newlines' },
-}
--- Define formatting based on filetype
-local formatters_by_ft = {
-  dockerfile = { 'hadolint' },
-  go = { 'goimports', 'gofumpt' },
-  lua = { 'stylua' },
-  python = { 'ruff' },
-  terraform = { 'terraform_fmt' },
-  tf = { 'terraform_fmt' },
-  ['terraform-vars'] = { 'terraform_fmt' },
-  yaml = { 'prettier' },
-  -- For filetypes without a formatter
-  ['_'] = { 'trim_whitespace', 'trim_newlines' },
-}
 local add_on_event = require('vim-pack').add_on_event
 
 -- Disable "format_on_save lsp_fallback" for languages that don't
@@ -71,18 +45,19 @@ add_on_event('BufWritePre', {
         prettier = { require_cwd = true },
       },
     },
+    on_setup = function()
+      vim.api.nvim_create_user_command('ToggleFormat', function(opts)
+        if opts.bang then
+          vim.b.disable_autoformat = not vim.b.disable_autoformat
+          vim.notify(string.format('%s formatting (buffer)...', vim.b.disable_autoformat and 'Disabling' or 'Enabling'), vim.log.levels.INFO)
+        else
+          vim.g.disable_autoformat = not vim.g.disable_autoformat
+          vim.notify(string.format('%s formatting (globally)...', vim.g.disable_autoformat and 'Disabling' or 'Enabling'), vim.log.levels.INFO)
+        end
+      end, { desc = 'Toggle autoformat on save', bang = true })
+    end,
   },
 })
-
-vim.api.nvim_create_user_command('ToggleFormat', function(opts)
-  if opts.bang then
-    vim.b.disable_autoformat = not vim.b.disable_autoformat
-    vim.notify(string.format('%s formatting (buffer)...', vim.b.disable_autoformat and 'Disabling' or 'Enabling'), vim.log.levels.INFO)
-  else
-    vim.g.disable_autoformat = not vim.g.disable_autoformat
-    vim.notify(string.format('%s formatting (globally)...', vim.g.disable_autoformat and 'Disabling' or 'Enabling'), vim.log.levels.INFO)
-  end
-end, { desc = 'Toggle autoformat on save', bang = true })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

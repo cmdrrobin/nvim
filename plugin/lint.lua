@@ -2,48 +2,51 @@ local add_on_event = require('vim-pack').add_on_event
 
 -- Define linters based on filetype
 local linters_by_ft = {
-  markdown = { 'markdownlint-cli2' },
   ansible = { 'ansible_lint' },
+  markdown = { 'markdownlint-cli2' },
   yaml = { 'yamllint' },
 }
 
 add_on_event({ 'BufReadPre', 'BufNewFile' }, {
-  src = 'https://github.com/mfussenegger/nvim-lint',
-  on_setup = function()
-    local lint = require('lint')
+  {
+    src = 'https://github.com/mfussenegger/nvim-lint',
+    name = 'lint',
+    on_setup = function()
+      local lint = require('lint')
 
-    lint.linters_by_ft = linters_by_ft
+      lint.linters_by_ft = linters_by_ft
 
-    vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufWritePost', 'InsertLeave' }, {
-      group = vim.api.nvim_create_augroup('lint', { clear = true }),
-      callback = function()
-        -- Only run the linter in buffers that you can modify in order to
-        -- avoid superfluous noise, notably within the handy LSP pop-ups that
-        -- describe the hovered symbol using Markdown.
-        if vim.bo.modifiable then
-          lint.try_lint()
+      vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufWritePost', 'InsertLeave' }, {
+        group = vim.api.nvim_create_augroup('lint', { clear = true }),
+        callback = function()
+          -- Only run the linter in buffers that you can modify in order to
+          -- avoid superfluous noise, notably within the handy LSP pop-ups that
+          -- describe the hovered symbol using Markdown.
+          if vim.bo.modifiable then
+            lint.try_lint()
+          end
+        end,
+      })
+
+      -- add LinterInfo to display active linters
+      vim.api.nvim_create_user_command('LinterInfo', function()
+        local runningLinters = table.concat(require('lint').linters_by_ft[vim.bo.filetype] or {}, '\n')
+        if runningLinters == '' then
+          runningLinters = 'No linters available'
         end
-      end,
-    })
+        vim.notify(runningLinters, vim.log.levels.INFO, { title = 'nvim-lint' })
+      end, {})
 
-    -- add LinterInfo to display active linters
-    vim.api.nvim_create_user_command('LinterInfo', function()
-      local runningLinters = table.concat(require('lint').linters_by_ft[vim.bo.filetype] or {}, '\n')
-      if runningLinters == '' then
-        runningLinters = 'No linters available'
-      end
-      vim.notify(runningLinters, vim.log.levels.INFO, { title = 'nvim-lint' })
-    end, {})
-
-    -- add LinterRunning to show active running linters
-    vim.api.nvim_create_user_command('LinterRunning', function()
-      local runningLinters = table.concat(require('lint').get_running() or {}, '\n')
-      if runningLinters == '' then
-        runningLinters = 'No running linters'
-      end
-      vim.notify(runningLinters, vim.log.levels.INFO, { title = 'nvim-lint' })
-    end, {})
-  end,
+      -- add LinterRunning to show active running linters
+      vim.api.nvim_create_user_command('LinterRunning', function()
+        local runningLinters = table.concat(require('lint').get_running() or {}, '\n')
+        if runningLinters == '' then
+          runningLinters = 'No running linters'
+        end
+        vim.notify(runningLinters, vim.log.levels.INFO, { title = 'nvim-lint' })
+      end, {})
+    end,
+  },
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`

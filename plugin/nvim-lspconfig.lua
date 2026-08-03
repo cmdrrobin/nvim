@@ -1,3 +1,5 @@
+local add = require('vim-pack').add
+
 ---@type table<string>
 local enable_lsp = {
   'ansiblels',
@@ -16,6 +18,13 @@ local enable_lsp = {
   'yamlls',
 }
 
-vim.pack.add({ 'https://github.com/neovim/nvim-lspconfig' }, { confirm = false })
-
-vim.lsp.enable(enable_lsp)
+add({
+  {
+    src = 'https://github.com/neovim/nvim-lspconfig',
+    name = 'lspconfig',
+    setup = false,
+    on_setup = function()
+      vim.lsp.enable(enable_lsp)
+    end,
+  },
+})

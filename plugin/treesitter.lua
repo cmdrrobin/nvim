@@ -37,7 +37,7 @@ add({
     end,
   },
   {
-    src = 'nvim-treesitter/nvim-treesitter-context',
+    src = 'https://github.com/nvim-treesitter/nvim-treesitter-context',
     name = 'treesitter-context',
     opts = {
       -- Avoid the sticky context from growing a lot.

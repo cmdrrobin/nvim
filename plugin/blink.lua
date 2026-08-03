@@ -1,15 +1,16 @@
 local add = require('vim-pack').add
 local add_on_event = require('vim-pack').add_on_event
+local on_plugin_update = require('vim-pack').on_plugin_update
 
 add({
   { src = 'https://github.com/saghen/blink.lib', setup = false },
-  { src = 'https://github.com/rafamadriz/friendly-snippets', setup = false },
+  { src = 'https://github.com/rafamadriz/friendly-snippets', setup = false }, -- will be loaded with blink
 })
 
 add_on_event('InsertEnter', {
   {
     src = 'https://github.com/saghen/blink.cmp',
-    version = vim.version.range('1.x'),
+    -- version = vim.version.range('1.x'),
     opts = {
       -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
       -- 'super-tab' for mappings similar to vscode (tab to accept)
@@ -33,6 +34,10 @@ add_on_event('InsertEnter', {
           window = {
             border = 'padded',
           },
+        },
+        list = {
+          max_items = 15,
+          selection = { preselect = false },
         },
         menu = {
           border = 'padded',
@@ -93,6 +98,11 @@ add_on_event('InsertEnter', {
             module = 'blink.cmp.sources.buffer',
             min_keyword_length = 2,
             score_offset = 15, -- the higher the number, the higher the priority
+          },
+          snippets = {
+            opts = {
+              friendly_snippets = true,
+            },
           },
         },
       },
