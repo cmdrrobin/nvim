@@ -126,16 +126,16 @@ vim.diagnostic.config({
 
 -- Load LSP configs and capabilities when opening or creating a new file.
 -- This speeds up the initial loading of Neovim. Altough not required to do this.
-vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
-  group = vim.api.nvim_create_augroup('cmdrrobin-lsp-config', { clear = true }),
-  callback = function()
-    -- Enable LSP for defined filetypes
-    -- NOTE: should we enable this when mason-lspconfig is loaded?
-    vim.lsp.enable({
-      'lua_ls',
-    })
-  end,
-})
+-- vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
+--   group = vim.api.nvim_create_augroup('cmdrrobin-lsp-config', { clear = true }),
+--   callback = function()
+--     -- Enable LSP for defined filetypes
+--     -- NOTE: should we enable this when mason-lspconfig is loaded?
+--     vim.lsp.enable({
+--       'lua_ls',
+--     })
+--   end,
+-- })
 
 -- LspLog window in new tab
 vim.api.nvim_create_user_command('LspLog', function()
