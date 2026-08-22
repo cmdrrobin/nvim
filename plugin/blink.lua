@@ -1,16 +1,30 @@
-vim.pack.add({
-  { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') },
+vim.api.nvim_create_autocmd('PackChanged', {
+  callback = function(ev)
+    local name, kind = ev.data.spec.name, ev.data.kind
+
+    -- Run build script after plugin's code has changed
+    if name == 'blink.cmp' and (kind == 'install' or kind == 'update') then
+      require('blink.cmp').build():pwait()
+    end
+  end,
 })
 
+vim.pack.add({
+  { src = 'https://github.com/saghen/blink.lib', setup = false },
+  { src = 'https://github.com/saghen/blink.cmp', setup = false },
+})
+
+-- Try to load friendly-snippets as late as possible. friendly-snippets will be loaded via blink
 vim.schedule(function()
-  vim.pack.add({ 'https://github.com/rafamadriz/friendly-snippets' })
+  vim.pack.add({
+    { src = 'https://github.com/rafamadriz/friendly-snippets', setup = false },
+  })
 end)
 
 vim.api.nvim_create_autocmd('InsertEnter', {
   once = true,
   callback = function()
-    local blink = require('blink.cmp')
-    blink.setup({
+    require('blink.cmp').setup({
       -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
       -- 'super-tab' for mappings similar to vscode (tab to accept)
       -- 'enter' for enter to accept
@@ -33,6 +47,10 @@ vim.api.nvim_create_autocmd('InsertEnter', {
           window = {
             border = 'padded',
           },
+        },
+        list = {
+          max_items = 15,
+          selection = { preselect = false },
         },
         menu = {
           border = 'padded',

@@ -1,22 +1,45 @@
-local ensure_installed = {
-  'bash',
-  'c',
-  'diff',
-  'gitcommit',
-  'go',
-  'html',
-  'lua',
-  'luadoc',
-  'markdown',
-  'markdown_inline',
-  'python',
-  'regex',
-  'query',
-  'terraform',
-  'toml',
-  'vim',
-  'vimdoc',
-}
+-- Prepending nvim-treesitter's `runtime/` shadows Neovim's bundled queries for every language, not just the ones
+-- listed below. Those queries track nvim-treesitter's parser revisions, so any parser Neovim bundles has to be
+-- reinstalled from nvim-treesitter or the two drift apart and stuff breaks.
+local function install_list()
+  local parsers = {
+    'bash',
+    'c',
+    'diff',
+    'gitcommit',
+    'go',
+    'html',
+    'json',
+    'json5',
+    'lua',
+    'luadoc',
+    'markdown',
+    'markdown_inline',
+    'python',
+    'query',
+    'regex',
+    'terraform',
+    'toml',
+    'vim',
+    'vimdoc',
+    'yaml',
+  }
+
+  local set = {}
+  for _, parser in ipairs(parsers) do
+    set[parser] = true
+  end
+
+  local site = vim.fn.stdpath('data')
+  for _, path in ipairs(vim.api.nvim_get_runtime_file('parser/*', true)) do
+    -- Skip the parsers nvim-treesitter already installed under `site/`.
+    if not vim.startswith(path, site) then
+      set[vim.fn.fnamemodify(path, ':t:r')] = true
+    end
+  end
+
+  return vim.tbl_keys(set)
+end
 
 vim.pack.add({
   { src = 'https://github.com/nvim-treesitter/nvim-treesitter', data = { build = 'TSUpdate' } },
@@ -38,7 +61,7 @@ if init then
 end
 
 -- ensure basic parsers are installed
-TS.install(ensure_installed)
+TS.install(install_list)
 
 require('nvim-treesitter-textobjects').setup()
 
