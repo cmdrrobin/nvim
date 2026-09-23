@@ -61,42 +61,7 @@ if init then
 end
 
 -- ensure basic parsers are installed
-TS.install(install_list)
-
-require('nvim-treesitter-textobjects').setup()
-
-require('treesitter-context').setup({
-  enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
-  throttle = true, -- Throttles plugin updates (may improve performance)
-  max_lines = 3, -- How many lines the window should span. Values <= 0 mean no limit.
-  multiline_threshold = 1, -- Match the context lines to the source code.
-})
-
----@param buf integer
----@param language string
-local function treesitter_try_attach(buf, language)
-  -- check if parser exists and load it
-  if not vim.treesitter.language.add(language) then
-    return
-  end
-
-  -- check if the buffer is valid (might not be after install completes)
-  if not vim.api.nvim_buf_is_valid(buf) then
-    return
-  end
-
-  -- enables syntax highlighting and other treesitter features
-  vim.treesitter.start(buf, language)
-
-  -- enables treesitter based folds
-  -- for more info on folds see `:help folds`
-  -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-
-  -- enables treesitter based indentation
-  vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-end
-
-local available_parsers = TS.get_available()
+TS.install(install_list()):wait(300000)
 
 -- Custom autocmd just for attachment (installation handled natively)
 vim.api.nvim_create_autocmd('FileType', {
@@ -109,24 +74,33 @@ vim.api.nvim_create_autocmd('FileType', {
     end
 
     -- Check fresh each time (not cached at load time)
+    local available_parsers = TS.get_available()
     local installed_parsers = TS.get_installed('parsers')
 
-    if vim.tbl_contains(installed_parsers, language) then
-      -- enable the parser if it is installed
-      treesitter_try_attach(buf, language)
-    elseif vim.tbl_contains(available_parsers, language) then
-      -- if a parser is available in `nvim-treesitter` enable it after ensuring it is installed
-      TS.install(language):await(function()
-        treesitter_try_attach(buf, language)
-      end)
-    else
-      -- try to enable treesitter features in case the parser exists but is not available from `nvim-treesitter`
-      treesitter_try_attach(buf, language)
+    local is_available = vim.tbl_contains(available_parsers, language)
+    local is_installed = vim.tbl_contains(installed_parsers, language)
+
+    if not is_installed and is_available then
+      -- parser is available in `nvim-treesitter` but not installed yet; install it
+      TS.install(language):wait(300000)
     end
+
+    -- start the parser for loaded language
+    pcall(vim.treesitter.start, buf)
+    vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
   end,
 })
 
+require('treesitter-context').setup({
+  enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+  throttle = true, -- Throttles plugin updates (may improve performance)
+  max_lines = 3, -- How many lines the window should span. Values <= 0 mean no limit.
+  multiline_threshold = 1, -- Match the context lines to the source code.
+})
+
 -- SELECT keymaps
+require('nvim-treesitter-textobjects').setup()
+
 local sel = require('nvim-treesitter-textobjects.select')
 for _, map in ipairs({
   { { 'x', 'o' }, 'af', '@function.outer' },
