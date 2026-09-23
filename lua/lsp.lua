@@ -129,6 +129,13 @@ vim.diagnostic.config({
 vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
   group = vim.api.nvim_create_augroup('cmdrrobin-lsp-config', { clear = true }),
   callback = function()
+    local blink_ok, blink = pcall(require, 'blink.cmp')
+
+    -- When blink is available, enable the blink lsp capabilities
+    if blink_ok then
+      vim.lsp.config('*', { capabilities = blink.get_lsp_capabilities(nil, true) })
+    end
+
     -- Enable LSP for defined filetypes
     -- NOTE: should we enable this when mason-lspconfig is loaded?
     vim.lsp.enable({
