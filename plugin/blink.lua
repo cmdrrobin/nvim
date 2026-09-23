@@ -4,6 +4,10 @@ vim.api.nvim_create_autocmd('PackChanged', {
 
     -- Run build script after plugin's code has changed
     if name == 'blink.cmp' and (kind == 'install' or kind == 'update') then
+      if not ev.data.active then
+        vim.cmd.packadd('blink.cmp')
+      end
+
       require('blink.cmp').build():pwait()
     end
   end,
