@@ -32,6 +32,10 @@
       "rev": "070a5d7b985546cc57e1fc61e5bc507fecac6045",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
+    "jj-diffconflicts": {
+      "rev": "a2aa9a247b56d2c1a6f6be81bcf41c5450cc82ff",
+      "src": "https://github.com/rafikdraoui/jj-diffconflicts"
+    },
     "markdown-preview.nvim": {
       "rev": "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee",
       "src": "https://github.com/iamcco/markdown-preview.nvim"
