@@ -35,7 +35,7 @@ vim.g.fff = {
 }
 
 -- stylua: ignore start
-vim.keymap.set('n', '<leader>sf', function() require('fff').find_files() end, { desc = 'FFFind files' })
-vim.keymap.set('n', '<leader>sg', function() require('fff').live_grep({ grep = { modes = { 'fuzzy', 'plain' } } }) end, { desc = 'Live fffuzy grep' })
-vim.keymap.set({ 'n', 'x' }, '<leader>sw', function() require('fff').live_grep_under_cursor() end, { desc = 'Search current word / selection' })
+vim.keymap.set('n', '<leader>ff', function() require('fff').find_files() end, { desc = 'FFFind files' })
+vim.keymap.set('n', '<leader>fg', function() require('fff').live_grep({ grep = { modes = { 'fuzzy', 'plain' } } }) end, { desc = 'Live fffuzy grep' })
+vim.keymap.set({ 'n', 'x' }, '<leader>fw', function() require('fff').live_grep_under_cursor() end, { desc = 'Search current word / selection' })
 -- stylua: ignore end

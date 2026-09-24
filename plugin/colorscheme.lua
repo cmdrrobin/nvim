@@ -23,6 +23,9 @@ require('rose-pine').setup({
     SnacksPickerTitle = { fg = 'base', bg = 'love' },
     SnacksPickerInputTitle = { fg = 'base', bg = 'rose' },
     SnacksPickerPreviewTitle = { fg = 'base', bg = 'iris' },
+
+    -- NOTE(robin): required for fff search selection
+    IncSearch = { fg = 'base', bg = 'gold' },
   },
 })
 -- Load the colorscheme here.
