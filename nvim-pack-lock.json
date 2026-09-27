@@ -21,7 +21,7 @@
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "fff": {
-      "rev": "e3f694a2e4f82bb755418e8d305dcff779c59c27",
+      "rev": "e5dccede829cec037b3a6699aceaa9e61ec9244b",
       "src": "https://github.com/dmtrKovalenko/fff"
     },
     "friendly-snippets": {
